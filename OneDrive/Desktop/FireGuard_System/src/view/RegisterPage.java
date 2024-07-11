@@ -13,7 +13,7 @@ public class RegisterPage {
     public RegisterPage(RegisterController controller) {
         this.controller = controller;
 
-        // Create a JFrame (window)
+        // Create a JFrame (window)..
         frame = new JFrame("Register Page");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLayout(new BorderLayout());
