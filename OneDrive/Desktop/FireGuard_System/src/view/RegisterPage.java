@@ -15,14 +15,12 @@ public class RegisterPage {
 
         // Create a JFrame (window)
         frame = new JFrame("Register Page");
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Use DISPOSE_ON_CLOSE for non-main windows
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLayout(new BorderLayout());
 
-        // Set background color for the content pane
         Color bgColor = Color.decode("#FFDEC8");
         frame.getContentPane().setBackground(bgColor);
 
-        // Load and resize the image (Replace with your image path)
         String imagePath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuardApplication1\\src\\images\\SytemLogo.png"; // Path to your image file
         ImageIcon originalIcon = new ImageIcon(imagePath);
         JLabel imagLabel = new JLabel(originalIcon);
