@@ -1,5 +1,12 @@
 import Dao.User;
+import Dao.InventoryDAO; 
+import Dao.InventoryDAOImpl;
+import Dao.UserDAO;
+import Dao.UserDAOImpl;
+import controller.InventoryController;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.*;
 
 public class DashboardPage {
@@ -49,7 +56,16 @@ public class DashboardPage {
             ImageIcon inventoryIcon = new ImageIcon(new ImageIcon(inventoryIconPath).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
             JButton inventoryButton = new JButton("Inventory", inventoryIcon);
             configureButton(inventoryButton);
-
+            inventoryButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                InventoryDAO inventoryDAO = new InventoryDAOImpl();
+                InventoryController inventoryController = new InventoryController(inventoryDAO); // Instantiate RegisterController with UserDAO
+                InventoryPage inventoryPage = new InventoryPage(inventoryController); // Pass RegisterController to RegisterPage
+                inventoryPage.setVisible(true);
+                frame.dispose();
+            }
+        });
             // Report button with text and image
             String reportIconPath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuardApplication1\\src\\images\\download (7).png";
             ImageIcon reportIcon = new ImageIcon(new ImageIcon(reportIconPath).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
@@ -113,6 +129,7 @@ public class DashboardPage {
             frame.setVisible(true);
         });
     }
+    
 
     // Method to configure button styling
     private static void configureButton(JButton button) {

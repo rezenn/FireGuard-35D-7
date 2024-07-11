@@ -146,9 +146,6 @@ public class RegisterPage {
         frame.setVisible(true);
     }
 
-    RegisterPage() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 
     // Helper method to create text field
     private JTextField createTextField(int width, int height) {
