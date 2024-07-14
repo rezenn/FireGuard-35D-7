@@ -151,7 +151,6 @@ public class DashboardPage {
         frame.setVisible(isVisible);
     }
 
-    // Main method to run the application
     public static void main(String[] args) {
         // Assuming User is already defined and available
         User user = new User();
