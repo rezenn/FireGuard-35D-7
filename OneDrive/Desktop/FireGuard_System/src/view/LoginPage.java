@@ -22,7 +22,7 @@ public class LoginPage {
         frame.getContentPane().setBackground(bgColor);
 
         // Load and resize image
-        String imagePath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuardApplication1\\src\\images\\SytemLogo.png";
+        String imagePath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuard_System\\src\\images\\SytemLogo.png";
         ImageIcon originalIcon = new ImageIcon(imagePath);
         JLabel imagLabel = new JLabel(originalIcon);
 

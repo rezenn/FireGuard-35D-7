@@ -11,6 +11,10 @@ public class User {
         this.password = password;
     }
 
+    public User() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
 
     public String getFullName() {
         return fullName;

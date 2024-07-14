@@ -21,7 +21,7 @@ public class RegisterPage {
         Color bgColor = Color.decode("#FFDEC8");
         frame.getContentPane().setBackground(bgColor);
 
-        String imagePath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuardApplication1\\src\\images\\SytemLogo.png"; // Path to your image file
+        String imagePath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuard_System\\src\\images\\SytemLogo.png"; 
         ImageIcon originalIcon = new ImageIcon(imagePath);
         JLabel imagLabel = new JLabel(originalIcon);
 

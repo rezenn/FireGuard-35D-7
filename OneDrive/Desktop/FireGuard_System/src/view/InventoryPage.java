@@ -1,3 +1,5 @@
+import Dao.InventoryDAO;
+import Dao.InventoryDAOImpl;
 import Dao.User;
 import Dao.UserDAO;
 import Dao.UserDAOImpl;
@@ -14,12 +16,12 @@ public class InventoryPage {
     public InventoryPage(InventoryController controller) {
         this.controller = controller;
             // Create a JFrame (window).
-            JFrame frame = new JFrame("Dashboard");
+            frame = new JFrame("Dashboard");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setLayout(new BorderLayout());
 
             // Image Panel on the left
-            String imagePath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuardApplication1\\src\\images\\SytemLogo.png";
+            String imagePath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuard_System\\src\\images\\SytemLogo.png";
             ImageIcon originalIcon = new ImageIcon(imagePath);
             Image originalImage = originalIcon.getImage();
             int newWidth = 203;
@@ -29,43 +31,48 @@ public class InventoryPage {
             JLabel imageLabel = new JLabel(resizedIcon);
 
             // Dashboard button with text and image
-            String dashboardIconPath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuardApplication1\\src\\images\\download (5).png";
+            String dashboardIconPath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuard_System\\src\\images\\download (5).png";
             ImageIcon dashboardIcon = new ImageIcon(new ImageIcon(dashboardIconPath).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
             JButton dashboardButton = new JButton("Dashboard", dashboardIcon);
             configureButton(dashboardButton);
-//            dashboardButton.addActionListener(new ActionListener() {
-//                @Override
-//                public void actionPerformed(ActionEvent e) {
-//                controller.openDashboard(); 
-//            }
-//        });
+            dashboardButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                UserDAO userDAO = new UserDAOImpl();
+                DashboardController dashboardController = new DashboardController(userDAO);
+                User User = null;
+                DashboardPage dashboardPage = new DashboardPage(User);
+                dashboardPage.setVisible(true);
+                frame.dispose();
+            }
+        });
             
             // Schedule button with text and a different image
-            String scheduleIconPath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuardApplication1\\src\\images\\download (1).png";
+            String scheduleIconPath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuard_System\\src\\images\\download (1).png";
             ImageIcon scheduleIcon = new ImageIcon(new ImageIcon(scheduleIconPath).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
             JButton scheduleButton = new JButton("Schedule", scheduleIcon);
             configureButton(scheduleButton);
 
             // Staff button with text and image
-            String staffIconPath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuardApplication1\\src\\images\\download.png";
+            String staffIconPath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuard_System\\src\\images\\download.png";
             ImageIcon staffIcon = new ImageIcon(new ImageIcon(staffIconPath).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
             JButton staffButton = new JButton("Staff", staffIcon);
             configureButton(staffButton);
 
             // Operation button with text and image
-            String operationIconPath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuardApplication1\\src\\images\\download (6).png";
+            String operationIconPath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuard_System\\src\\images\\download (6).png";
             ImageIcon operationIcon = new ImageIcon(new ImageIcon(operationIconPath).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
             JButton operationButton = new JButton("Operation", operationIcon);
             configureButton(operationButton);
 
             // Inventory button with text and image
-            String inventoryIconPath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuardApplication1\\src\\images\\download (2).png";
+            String inventoryIconPath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuard_System\\src\\images\\download (2).png";
             ImageIcon inventoryIcon = new ImageIcon(new ImageIcon(inventoryIconPath).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
             JButton inventoryButton = new JButton("Inventory", inventoryIcon);
             configureButton(inventoryButton);
 
             // Report button with text and image
-            String reportIconPath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuardApplication1\\src\\images\\download (7).png";
+            String reportIconPath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuard_System\\src\\images\\download (7).png";
             ImageIcon reportIcon = new ImageIcon(new ImageIcon(reportIconPath).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
             JButton reportButton = new JButton("Reports", reportIcon);
             configureButton(reportButton);
@@ -217,7 +224,7 @@ public class InventoryPage {
             AddInventory.setForeground(Color.WHITE);
             AddInventory.setFocusPainted(false);
             AddInventory.setFont(new Font("Arial",Font.PLAIN, 24)); 
-            AddInventory.setBounds(250, 640, 370, 60);
+            AddInventory.setBounds(100, 640, 270, 60);
             AddInventory.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -233,6 +240,24 @@ public class InventoryPage {
             }
             });
         panel.add(AddInventory);
+        
+         JButton DisplayButton = new JButton("Display Items");
+            DisplayButton.setBackground(Color.decode("#01520E"));
+            DisplayButton.setForeground(Color.WHITE);
+            DisplayButton.setFocusPainted(false);
+            DisplayButton.setFont(new Font("Arial", Font.PLAIN, 24));
+            DisplayButton.setBounds(500, 640, 270, 60);
+            DisplayButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    InventoryDAO inventoryDAO = new InventoryDAOImpl();
+                    InventoryController inventoryController = new InventoryController(inventoryDAO);
+                    InventoryListPage inventoryListPage = new InventoryListPage(inventoryController);
+                    inventoryListPage.setVisible(true);
+                    frame.dispose(); 
+                }
+            });
+            panel.add(DisplayButton);
             // Create a panel to add margins around the right panel
             JPanel rightPanelWithMargin = new JPanel(new BorderLayout());
             rightPanelWithMargin.setBorder(BorderFactory.createEmptyBorder(80, 80, 80, 80));
