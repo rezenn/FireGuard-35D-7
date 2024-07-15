@@ -1,20 +1,21 @@
+
 import Dao.InventoryDAO;
 import Dao.InventoryDAOImpl;
 import Dao.User;
 import Dao.UserDAO;
 import Dao.UserDAOImpl;
-import controller.DashboardController;
 import controller.InventoryController;
+import controller.StaffController;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class InventoryPage {
+public class StaffPage {
     private JFrame frame;
-    private InventoryController controller;
+    private StaffController controller;
 
-    public InventoryPage(InventoryController controller) {
+    public StaffPage(StaffController controller) {
         this.controller = controller;
             // Create a JFrame (window).
             frame = new JFrame("Dashboard");
@@ -114,7 +115,7 @@ public class InventoryPage {
             panel.setBounds(300, 70, 1150, 710);
             frame.add(panel);
 
-            JLabel inventory = new JLabel("Add To Inventory");
+            JLabel inventory = new JLabel("Add Staff");
             panel.setLayout(null); 
             inventory.setBounds(80,30,250,30);
             inventory.setBackground(Color.decode("#FFDEC8"));

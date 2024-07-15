@@ -1,17 +1,22 @@
-import Dao.InventoryDAO;
 import Dao.User;
+import Dao.InventoryDAO;
 import Dao.InventoryDAOImpl;
+import dao.OperationDAO;
+import dao.OperationDAOImpl;
 import controller.InventoryController;
+import controller.OperationController;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class DashboardPage {
+    private JFrame frame;
+
     public DashboardPage(User user) {
         SwingUtilities.invokeLater(() -> {
             // Create a JFrame (window)
-            JFrame frame = new JFrame("Dashboard");
+            frame = new JFrame("Dashboard");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setLayout(new BorderLayout());
 
@@ -48,6 +53,16 @@ public class DashboardPage {
             ImageIcon operationIcon = new ImageIcon(new ImageIcon(operationIconPath).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
             JButton operationButton = new JButton("Operation", operationIcon);
             configureButton(operationButton);
+            operationButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    OperationDAO operationDAO = new OperationDAOImpl();  // Replace with your implementation
+                    OperationController operationController = new OperationController(operationDAO);  // Replace with your implementation
+                    OperationPage operationPage = new OperationPage(operationController);
+                    operationPage.setVisible(true);
+                    frame.dispose();
+                }
+            });
 
             // Inventory button with text and image
             String inventoryIconPath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuard_System\\src\\images\\download (2).png";
@@ -57,13 +72,13 @@ public class DashboardPage {
             inventoryButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    InventoryDAO inventoryDAO = new InventoryDAOImpl();
-                    InventoryController inventoryController = new InventoryController(inventoryDAO);
+                    InventoryDAO inventoryDAO = new InventoryDAOImpl();  // Replace with your implementation
+                    InventoryController inventoryController = new InventoryController(inventoryDAO);  // Replace with your implementation
                     InventoryPage inventoryPage = new InventoryPage(inventoryController);
                     inventoryPage.setVisible(true);
-                    frame.dispose(); // Close the dashboard page
-                    }
-                });
+                    frame.dispose();
+                }
+            });
 
             // Report button with text and image
             String reportIconPath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuard_System\\src\\images\\download (7).png";
