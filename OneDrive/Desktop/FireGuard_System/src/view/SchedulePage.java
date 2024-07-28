@@ -4,7 +4,6 @@ import Dao.UserDAOImpl;
 import controller.DashboardController;
 import controller.ScheduleController;
 import controller.StaffController;
-import dao.ScheduleDAO;
 import dao.ScheduleDAOImpl;
 import dao.StaffDAO;
 import dao.StaffDAOImpl;
@@ -12,16 +11,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import model.Staff;
 
-public class StaffPage {
+public class SchedulePage {
     private JFrame frame;
-    private StaffController controller;
+    private ScheduleController controller;
 
-    public StaffPage(StaffController controller) {
+    public SchedulePage(ScheduleController controller) {
         this.controller = controller;
             // Create a JFrame (window).
-            frame = new JFrame("Staff");
+            frame = new JFrame("Schedule");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setLayout(new BorderLayout());
 
@@ -57,23 +55,29 @@ public class StaffPage {
             ImageIcon scheduleIcon = new ImageIcon(new ImageIcon(scheduleIconPath).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
             JButton scheduleButton = new JButton("Schedule", scheduleIcon);
             configureButton(scheduleButton);
-            scheduleButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    ScheduleDAO scheduleDAO = new ScheduleDAOImpl();
-                    ScheduleController scheduleController = new ScheduleController(scheduleDAO);
-                    SchedulePage schedulePage = new SchedulePage(scheduleController);
-                    schedulePage.setVisible(true);
-                    frame.dispose();
-                }
-            });
 
-            // Staff button with text and image
+            // Schedule button with text and image
             String staffIconPath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuard_System\\src\\images\\download.png";
             ImageIcon staffIcon = new ImageIcon(new ImageIcon(staffIconPath).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
             JButton staffButton = new JButton("Staff", staffIcon);
             configureButton(staffButton);
-           
+            
+            String staffViewIconPath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuard_System\\src\\images\\download.png";
+            ImageIcon staffViewIcon = new ImageIcon(new ImageIcon(staffViewIconPath).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+            JButton staffViewButton = new JButton("View Schedule ", staffViewIcon);
+            configureButton(staffViewButton);
+            staffButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    StaffDAO staffDAO = new StaffDAOImpl();
+                    StaffController staffController = new StaffController(staffDAO);
+                    StaffPage staffPage = new StaffPage(staffController);
+                    staffPage.setVisible(true);
+                    frame.dispose();
+                }
+            });
+
+       
              // Create a panel with BoxLayout to stack image and buttons vertically
              JPanel stackPanel = new JPanel();
              stackPanel.setLayout(new BoxLayout(stackPanel, BoxLayout.Y_AXIS));
@@ -103,10 +107,10 @@ public class StaffPage {
  
             JPanel panel = new JPanel();
             panel.setBackground(Color.decode("#FFDEC8"));
-            panel.setBounds(300, 70, 1150, 710);
+            panel.setBounds(300, 70, 950, 610);
             frame.add(panel);
 
-            JLabel inventory = new JLabel("Add Staff");
+            JLabel inventory = new JLabel("Add New Schedule");
             panel.setLayout(null); 
             inventory.setBounds(80,30,250,30);
             inventory.setBackground(Color.decode("#FFDEC8"));
@@ -128,140 +132,113 @@ public class StaffPage {
             nameField.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));  
             panel.add(nameField);
 
-            JLabel staff_id = new JLabel("Staff ID:");
-            panel.setLayout(null); 
-            staff_id.setBounds(100,170,150,30);
-            staff_id.setBackground(Color.decode("#FFDEC8"));
-            staff_id.setFont(new Font("Arial", Font.BOLD, 18)); 
-            panel.add(staff_id);
-            JTextField staff_idField = new JTextField();
-            staff_idField.setLayout(null); 
-            staff_idField.setBackground(Color.decode("#FFDEC8"));
-            staff_idField.setBounds(300,170,300,35);
-            staff_idField.setFont(new Font("Arial",Font.PLAIN, 18)); 
-            staff_idField.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));  
-            panel.add(staff_idField);
-
             JLabel rank = new JLabel("Rank:");
             panel.setLayout(null); 
-            rank.setBounds(100,230,150,30);
+            rank.setBounds(100,170,150,30);
             rank.setBackground(Color.decode("#FFDEC8"));
             rank.setFont(new Font("Arial", Font.BOLD, 18)); 
             panel.add(rank);
             JTextField rankField = new JTextField();
             rankField.setLayout(null); 
             rankField.setBackground(Color.decode("#FFDEC8"));
-            rankField.setBounds(300,230,300,35);
+            rankField.setBounds(300,170,300,35);
             rankField.setFont(new Font("Arial",Font.PLAIN, 18)); 
             rankField.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));  
             panel.add(rankField);
 
-            JLabel age = new JLabel("Age:");
-            panel.setLayout(null); 
-            age.setBounds(100,290,150,30);
-            age.setBackground(Color.decode("#FFDEC8"));
-            age.setFont(new Font("Arial", Font.BOLD, 18)); 
-            panel.add(age);
-            JTextField ageField = new JTextField();
-            ageField.setLayout(null); 
-            ageField.setBackground(Color.decode("#FFDEC8"));
-            ageField.setBounds(300,290,300,35);
-            ageField.setFont(new Font("Arial",Font.PLAIN, 18)); 
-            ageField.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));  
-            panel.add(ageField);
 
             JLabel phone_number = new JLabel("Phone Number:");
             panel.setLayout(null); 
-            phone_number.setBounds(100,350,180,30);
+            phone_number.setBounds(100,230,180,30);
             phone_number.setBackground(Color.decode("#FFDEC8"));
             phone_number.setFont(new Font("Arial", Font.BOLD, 18)); 
             panel.add(phone_number);
             JTextField phone_numberField = new JTextField();
             phone_numberField.setLayout(null); 
             phone_numberField.setBackground(Color.decode("#FFDEC8"));
-            phone_numberField.setBounds(300,350,300,35);
+            phone_numberField.setBounds(300,230,300,35);
             phone_numberField.setFont(new Font("Arial",Font.PLAIN, 18)); 
             phone_numberField.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));  
             panel.add(phone_numberField);
-
+            
             JLabel email = new JLabel("Email:");
             panel.setLayout(null); 
-            email.setBounds(100,410,150,30);
+            email.setBounds(100,290,150,30);
             email.setBackground(Color.decode("#FFDEC8"));
             email.setFont(new Font("Arial", Font.BOLD, 18)); 
             panel.add(email);
             JTextField emailField = new JTextField();
             emailField.setLayout(null); 
+            emailField.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1)); 
             emailField.setBackground(Color.decode("#FFDEC8"));
-            emailField.setBounds(300,410,300,35);
+            emailField.setBounds(300,290,300,35);
             emailField.setFont(new Font("Arial",Font.PLAIN, 18));
-            emailField.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));  
             panel.add(emailField);
 
-            JLabel address = new JLabel("Address:");
+            JLabel date = new JLabel("Date:");
             panel.setLayout(null); 
-            address.setBounds(100,470,150,30);
-            address.setBackground(Color.decode("#FFDEC8"));
-            address.setFont(new Font("Arial", Font.BOLD, 18)); 
-            panel.add(address);
-            JTextField addressField = new JTextField();
-            addressField.setLayout(null); 
-            addressField.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1)); 
-            addressField.setBackground(Color.decode("#FFDEC8"));
-            addressField.setBounds(300,470,300,35);
-            addressField.setFont(new Font("Arial",Font.PLAIN, 18));
-            panel.add(addressField);
-            
-            JLabel recruit_date = new JLabel("Recruit Date :");
-            panel.setLayout(null); 
-            recruit_date.setBounds(100,530,150,30);
-            recruit_date.setBackground(Color.decode("#FFDEC8"));
-            recruit_date.setFont(new Font("Arial", Font.BOLD, 18)); 
-            panel.add(recruit_date);
-            JTextField recruit_dateField = new JTextField();
-            recruit_dateField.setLayout(null); 
-            recruit_dateField.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1)); 
-            recruit_dateField.setBackground(Color.decode("#FFDEC8"));
-            recruit_dateField.setBounds(300,530,300,35);
-            recruit_dateField.setFont(new Font("Arial",Font.PLAIN, 18)); 
-            panel.add(recruit_dateField);
+            date.setBounds(100,350,150,30);
+            date.setBackground(Color.decode("#FFDEC8"));
+            date.setFont(new Font("Arial", Font.BOLD, 18)); 
+            panel.add(date);
+            JTextField dateField = new JTextField();
+            dateField.setLayout(null); 
+            dateField.setBackground(Color.decode("#FFDEC8"));
+            dateField.setBounds(300,350,300,35);
+            dateField.setFont(new Font("Arial",Font.PLAIN, 18));
+            dateField.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));  
+            panel.add(dateField);
 
-            JButton AddStaff = new JButton("Add Staff");
-            AddStaff.setBackground(Color.decode("#01520E"));
-            AddStaff.setForeground(Color.WHITE);
-            AddStaff.setFocusPainted(false);
-            AddStaff.setFont(new Font("Arial",Font.PLAIN, 24)); 
-            AddStaff.setBounds(100, 630, 270, 60);
-            AddStaff.addActionListener(new ActionListener() {
+            JLabel shift = new JLabel("Shift:");
+            panel.setLayout(null); 
+            shift.setBounds(100,410,150,30);
+            shift.setBackground(Color.decode("#FFDEC8"));
+            shift.setFont(new Font("Arial", Font.BOLD, 18)); 
+            panel.add(shift);
+            JTextField shiftField = new JTextField();
+            shiftField.setLayout(null); 
+            shiftField.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1)); 
+            shiftField.setBackground(Color.decode("#FFDEC8"));
+            shiftField.setBounds(300,410,300,35);
+            shiftField.setFont(new Font("Arial",Font.PLAIN, 18));
+            panel.add(shiftField);
+            
+
+            JButton AddSchedule = new JButton("Add Schedule");
+            AddSchedule.setBackground(Color.decode("#01520E"));
+            AddSchedule.setForeground(Color.WHITE);
+            AddSchedule.setFocusPainted(false);
+            AddSchedule.setFont(new Font("Arial",Font.PLAIN, 24)); 
+            AddSchedule.setBounds(100, 500, 270, 60);
+            AddSchedule.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String name = nameField.getText();
-                String staff_id = staff_idField.getText();
                 String rank = rankField.getText();
-                String age = ageField.getText();
                 String phone_number = phone_numberField.getText();
                 String email = emailField.getText();
-                String address = addressField.getText();
-                String recruit_date = recruit_dateField.getText();
+                String date = dateField.getText();
+                String shift = shiftField.getText();
 
-                controller.addStaff(name, staff_id, rank, age, phone_number, email, address, recruit_date);
+
+                controller.addSchedule(name, rank, phone_number, email, date, shift);
 
             }
         });
-        panel.add(AddStaff);
+        panel.add(AddSchedule);
         
-         JButton DisplayButton = new JButton("Display Staff");
+         JButton DisplayButton = new JButton("Display Schedule");
             DisplayButton.setBackground(Color.decode("#01520E"));
             DisplayButton.setForeground(Color.WHITE);
             DisplayButton.setFocusPainted(false);
             DisplayButton.setFont(new Font("Arial", Font.PLAIN, 24));
-            DisplayButton.setBounds(500, 630, 270, 60);
+            DisplayButton.setBounds(500, 500, 270, 60);
             DisplayButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    StaffDAO staffDAO = new StaffDAOImpl();
-                    StaffController staffController = new StaffController(staffDAO);
-                    StaffListPage staffListPage = new StaffListPage(staffController);
+                    ScheduleDAOImpl staffDAO = new ScheduleDAOImpl();
+                    ScheduleController staffController = new ScheduleController(staffDAO);
+                    ScheduleListPage staffListPage = new ScheduleListPage(staffController);
                     staffListPage.setVisible(true);
                     frame.dispose(); 
                 }

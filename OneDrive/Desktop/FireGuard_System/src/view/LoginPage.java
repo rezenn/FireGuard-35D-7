@@ -37,7 +37,7 @@ public class LoginPage {
 
         // Right panel for login
         JPanel rightPanel = new JPanel(new BorderLayout());
-        rightPanel.setPreferredSize(new Dimension(600, 820));
+        rightPanel.setPreferredSize(new Dimension(550, 775));
         rightPanel.setBackground(bgColor);
         rightPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 70));
 
@@ -80,6 +80,18 @@ public class LoginPage {
         formPanel.add(passwordLabel, gbc);
         gbc.gridy = 4;
         formPanel.add(passwordField, gbc);
+        
+         JLabel userTypeLabel = new JLabel("Select User Type");
+        gbc.gridy = 5;
+        formPanel.add(userTypeLabel, gbc);
+        String[] choices = {"Admin", "User"};
+        final JComboBox<String> dropDown = new JComboBox<>(choices);
+        dropDown.setBackground(Color.decode("#EFB481"));
+        dropDown.setFont(dropDown.getFont().deriveFont(14f));  // Set font size to 16
+        gbc.gridy = 6;
+        gbc.ipady = 10;
+        formPanel.add(dropDown, gbc);
+
 
         // Login button
         JButton loginButton = createButton("Login", 350, 50);
@@ -88,20 +100,21 @@ public class LoginPage {
             public void actionPerformed(ActionEvent e) {
                 String email = emailField.getText();
                 String password = new String(passwordField.getPassword());
+                String userType = (String) dropDown.getSelectedItem();
 
-                controller.loginuser(email, password);
+                controller.loginUser(email, password, userType);
             }
         });
         loginButton.setFont(new Font("Arial", Font.BOLD, 20));
         gbc.gridx = 0;
-        gbc.gridy = 5;
+        gbc.gridy = 7;
         formPanel.add(loginButton, gbc);
 
         // Sign-up prompt
         JLabel signUpPrompt = new JLabel("If you don’t have an account");
         signUpPrompt.setFont(new Font("Arial", Font.PLAIN, 16));
         gbc.gridx = 0;
-        gbc.gridy = 6;
+        gbc.gridy = 8;
         formPanel.add(signUpPrompt, gbc);
 
         // Sign up button
@@ -116,13 +129,13 @@ public class LoginPage {
             @Override
             public void actionPerformed(ActionEvent e) {
                 UserDAO userDAO = new UserDAOImpl();
-                RegisterController registerController = new RegisterController(userDAO); // Instantiate RegisterController with UserDAO
-                RegisterPage registerPage = new RegisterPage(registerController); // Pass RegisterController to RegisterPage
+                RegisterController registerController = new RegisterController(userDAO); 
+                RegisterPage registerPage = new RegisterPage(registerController);
                 registerPage.setVisible(true);
                 frame.dispose();
             }
         });
-        gbc.gridy = 7;
+        gbc.gridy = 9;
         gbc.anchor = GridBagConstraints.CENTER;
         formPanel.add(signup, gbc);
 
@@ -193,7 +206,7 @@ public class LoginPage {
     public void setVisible(boolean isVisible) {
         frame.setVisible(isVisible);
     }
-
+    
     public static void main(String[] args) {
         // Create and display the login page
         SwingUtilities.invokeLater(new Runnable() {

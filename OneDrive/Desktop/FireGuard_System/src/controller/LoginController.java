@@ -11,29 +11,32 @@ public class LoginController {
         this.userDao = new UserDAOImpl();
     }
 
-    public void loginuser(String email, String password) {
+    public void loginUser(String email, String userType, String password) {
         try {
-            User user = userDao.validateUser(email, password);
+            User user = userDao.validateUser(email, userType, password);
             if (user != null) {
-                // Successfully logged in
-                JOptionPane.showMessageDialog(null, "Login successful! Welcome " + user.getFullName());
-                // Proceed to the next screen or functionality
+                System.out.println("Login successful for userType: " + user.getUserType());
                 openDashboard(user);
-
             } else {
-                // Invalid credentials
-                JOptionPane.showMessageDialog(null, "Invalid email or password.", "Error", JOptionPane.ERROR_MESSAGE);
+                System.out.println("Invalid credentials for email: " + email);
+                JOptionPane.showMessageDialog(null, "Invalid Credentials", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "An error occurred while trying to log in. Please try again later.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
     private void openDashboard(User user) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                DashboardPage dashboardPage = new DashboardPage(user);
-                dashboardPage.setVisible(true);
+                if ("Admin".equalsIgnoreCase(user.getUserType())) {
+                    AdminDashboardPage adminDashboardPage = new AdminDashboardPage(user);
+                    adminDashboardPage.setVisible(true);
+                } else {
+                    DashboardPage userDashboardPage = new DashboardPage(user);
+                    userDashboardPage.setVisible(true);
+                }
             }
         });
     }

@@ -10,8 +10,8 @@ public class RegisterController {
         this.userDAO = userDAO;
     }
 
-    public void registerUser(String fullName, String email, String password, String confirmPassword) {
-        if (fullName.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+    public void registerUser(String fullName, String email, String userType, String password, String confirmPassword) {
+        if (fullName.isEmpty() || email.isEmpty() || userType.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please fill in all fields", "Error", JOptionPane.ERROR_MESSAGE);
         } else if (!password.equals(confirmPassword)) {
             JOptionPane.showMessageDialog(null, "Passwords do not match", "Error", JOptionPane.ERROR_MESSAGE);
@@ -19,7 +19,7 @@ public class RegisterController {
             JOptionPane.showMessageDialog(null, "Please enter a valid email address", "Error", JOptionPane.ERROR_MESSAGE);
         } else {
             // Create User object
-            User user = new User(fullName, email, password);
+            User user = new User(fullName, email, userType, password);
 
             try {
                 // Use DAO to insert user

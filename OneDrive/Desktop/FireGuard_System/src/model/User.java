@@ -4,15 +4,17 @@ public class User {
     private String fullName;
     private String email;
     private String password;
+    private String userType;
 
-    public User(String fullName, String email, String password) {
+    public User(String fullName, String email, String password, String userType) {
         this.fullName = fullName;
         this.email = email;
+        this.userType = userType;
         this.password = password;
     }
 
     public User() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        throw new UnsupportedOperationException("Not supported yet."); 
     }
 
 
@@ -31,6 +33,13 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+        public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
+    }    
 
     public String getPassword() {
         return password;

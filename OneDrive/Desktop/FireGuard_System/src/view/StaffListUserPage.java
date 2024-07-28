@@ -1,28 +1,39 @@
-import Dao.User;
 import Dao.InventoryDAO;
 import Dao.InventoryDAOImpl;
+import Dao.User;
+import Dao.UserDAO;
+import Dao.UserDAOImpl;
+import controller.DashboardController;
 import dao.OperationDAO;
 import dao.OperationDAOImpl;
+import dao.StaffDAO;
+import dao.StaffDAOImpl;
 import controller.InventoryController;
 import controller.OperationController;
 import controller.ScheduleController;
 import controller.StaffController;
 import dao.ScheduleDAO;
 import dao.ScheduleDAOImpl;
-import dao.StaffDAO;
-import dao.StaffDAOImpl;
+import model.Staff;
+
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
-public class DashboardPage {
+public class StaffListUserPage {
     private JFrame frame;
+    private StaffController controller;
+    private JTable staffTable;
 
-    public DashboardPage(User user) {
+    public StaffListUserPage(StaffController controller) {
+        this.controller = controller;
+
         SwingUtilities.invokeLater(() -> {
             // Create a JFrame (window)
-            frame = new JFrame("Dashboard");
+            frame = new JFrame("Staff");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setLayout(new BorderLayout());
 
@@ -41,6 +52,17 @@ public class DashboardPage {
             ImageIcon dashboardIcon = new ImageIcon(new ImageIcon(dashboardIconPath).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
             JButton dashboardButton = new JButton("Dashboard", dashboardIcon);
             configureButton(dashboardButton);
+            dashboardButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                UserDAO userDAO = new UserDAOImpl();
+                DashboardController dashboardController = new DashboardController(userDAO);
+                User user = null; // Initialize user if needed
+                DashboardPage dashboardPage = new DashboardPage(user);
+                dashboardPage.setVisible(true);
+                frame.dispose();
+            }
+        });
 
             // Schedule button with text and a different image
             String scheduleIconPath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuard_System\\src\\images\\download (1).png";
@@ -63,16 +85,6 @@ public class DashboardPage {
             ImageIcon staffIcon = new ImageIcon(new ImageIcon(staffIconPath).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
             JButton staffButton = new JButton("Staff", staffIcon);
             configureButton(staffButton);
-            staffButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    StaffDAO staffDAO = new StaffDAOImpl();
-                    StaffController staffController = new StaffController(staffDAO);
-                    StaffListUserPage staffListUserPage = new StaffListUserPage(staffController);
-                    staffListUserPage.setVisible(true);
-                    frame.dispose(); 
-                }
-            });
 
             // Operation button with text and image
             String operationIconPath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuard_System\\src\\images\\download (6).png";
@@ -140,34 +152,65 @@ public class DashboardPage {
             JPanel controlPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
             controlPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
 
-            // Content Panel in the center with null layout for absolute positioning
-            JPanel contentPanel = new JPanel(null);  // Using null layout for absolute positioning
+            // Content Panel in the center with BorderLayout for proper component placement
+            JPanel contentPanel = new JPanel(new GridBagLayout());
             contentPanel.setBackground(Color.WHITE);
-            contentPanel.setBorder(BorderFactory.createLineBorder(Color.decode("#FFDEC8"), 1));
+//            contentPanel.setBorder(BorderFactory.createLineBorder(Color.decode("#FFDEC8"), 1));
 
-            // Load and resize the map image
-            String mapIconPath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuard_System\\src\\images\\Map.png";
-            ImageIcon mapOriginalIcon = new ImageIcon(mapIconPath);
-            Image mapOriginalImage = mapOriginalIcon.getImage();
-            int mapWidth = 501;  // Set desired width
-            int mapHeight = 331;  // Set desired height
-            Image mapResizedImage = mapOriginalImage.getScaledInstance(mapWidth, mapHeight, Image.SCALE_SMOOTH);
-            ImageIcon mapResizedIcon = new ImageIcon(mapResizedImage);
-            JLabel mapLabel = new JLabel(mapResizedIcon);
-            mapLabel.setBounds(700, 400, mapWidth, mapHeight); // Set bounds for absolute positioning
+            // Create the panel with the specified size
+            JPanel tablePanel = new JPanel(new BorderLayout());
+            tablePanel.setPreferredSize(new Dimension(1070, 670));
+            tablePanel.setBorder(BorderFactory.createLineBorder(Color.decode("#FFDEC8"), 15));
+            tablePanel.setBackground(Color.decode("#FFDEC8"));
+                
+            JLabel titleLabel = new JLabel("Staff", JLabel.CENTER);
+            titleLabel.setFont(new Font("Arial", Font.BOLD, 26));
+            tablePanel.add(titleLabel, BorderLayout.NORTH);
+            
+            // Table model with column names
+            String[] columnNames = {"Staff ID", "Name", "Rank", "Age", "Phone Number", "Email", "Address", "Recruit Date"};
+            DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
+            staffTable = new JTable(tableModel);
+            staffTable.setBackground(Color.decode("#FFD3AD"));
+            JScrollPane scrollPane = new JScrollPane(staffTable);
+            tablePanel.add(scrollPane, BorderLayout.CENTER); // Add the scroll pane to the table panel
 
-            // Add mapLabel to contentPanel
-            contentPanel.add(mapLabel);
+            updateStaffTable();
+
+            // Add table panel to the content panel with GridBagLayout constraints
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.gridx = 0;
+            gbc.gridy = 0;
+            gbc.anchor = GridBagConstraints.CENTER;
+            contentPanel.add(tablePanel, gbc);
 
             // Add panels to the frame
             frame.add(imagePanel, BorderLayout.WEST);
             frame.add(controlPanel, BorderLayout.NORTH);
-            frame.add(contentPanel, BorderLayout.CENTER);
+            frame.add(contentPanel, BorderLayout.CENTER); // Add content panel to the frame
 
             // Set frame size and make it visible
             frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
             frame.setVisible(true);
         });
+    }
+
+    public void updateStaffTable() {
+        List<Staff> staffList = controller.getAllStaffs();
+        DefaultTableModel model = (DefaultTableModel) staffTable.getModel();
+        model.setRowCount(0); // Clear existing rows
+        for (Staff item : staffList) {
+            model.addRow(new Object[]{
+                    item.getStaff_id(),
+                    item.getName(),
+                    item.getRank(),
+                    item.getAge(),
+                    item.getPhone_number(),
+                    item.getEmail(),
+                    item.getAddress(),
+                    item.getRecruit_date()
+            });
+        }
     }
 
     // Method configure button styling
@@ -193,8 +236,8 @@ public class DashboardPage {
     }
 
     public static void main(String[] args) {
-        // Assuming User is already defined and available
-        User user = new User();
-        new DashboardPage(user).setVisible(true);
+        StaffDAO staffDAO = new StaffDAOImpl();
+        StaffController controller = new StaffController(staffDAO);
+        new StaffListUserPage(controller);
     }
 }

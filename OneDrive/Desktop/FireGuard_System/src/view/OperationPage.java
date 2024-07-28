@@ -1,10 +1,19 @@
+import Dao.InventoryDAO;
+import Dao.InventoryDAOImpl;
 import dao.OperationDAO;
 import dao.OperationDAOImpl;
 import Dao.User;
 import Dao.UserDAO;
 import Dao.UserDAOImpl;
 import controller.DashboardController;
+import controller.InventoryController;
 import controller.OperationController;
+import controller.ScheduleController;
+import controller.StaffController;
+import dao.ScheduleDAO;
+import dao.ScheduleDAOImpl;
+import dao.StaffDAO;
+import dao.StaffDAOImpl;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -53,12 +62,32 @@ public class OperationPage {
         ImageIcon scheduleIcon = new ImageIcon(new ImageIcon(scheduleIconPath).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
         JButton scheduleButton = new JButton("Schedule", scheduleIcon);
         configureButton(scheduleButton);
+        scheduleButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    ScheduleDAO scheduleDAO = new ScheduleDAOImpl();
+                    ScheduleController scheduleController = new ScheduleController(scheduleDAO);
+                    ScheduleListUserPage scheduleListUserPage = new ScheduleListUserPage(scheduleController);
+                    scheduleListUserPage.setVisible(true);
+                    frame.dispose(); 
+                }
+            });
 
         // Staff button with text and image
         String staffIconPath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuard_System\\src\\images\\download.png";
         ImageIcon staffIcon = new ImageIcon(new ImageIcon(staffIconPath).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
         JButton staffButton = new JButton("Staff", staffIcon);
         configureButton(staffButton);
+        staffButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    StaffDAO staffDAO = new StaffDAOImpl();
+                    StaffController staffController = new StaffController(staffDAO);
+                    StaffListUserPage staffListUserPage = new StaffListUserPage(staffController);
+                    staffListUserPage.setVisible(true);
+                    frame.dispose(); 
+                }
+            });
 
         // Operation button with text and image
         String operationIconPath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuard_System\\src\\images\\download (6).png";
@@ -71,6 +100,16 @@ public class OperationPage {
         ImageIcon inventoryIcon = new ImageIcon(new ImageIcon(inventoryIconPath).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
         JButton inventoryButton = new JButton("Inventory", inventoryIcon);
         configureButton(inventoryButton);
+        inventoryButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    InventoryDAO inventoryDAO = new InventoryDAOImpl();  
+                    InventoryController inventoryController = new InventoryController(inventoryDAO); 
+                    InventoryPage inventoryPage = new InventoryPage(inventoryController);
+                    inventoryPage.setVisible(true);
+                    frame.dispose();
+                }
+            });
 
         // Report button with text and image
         String reportIconPath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuard_System\\src\\images\\download (7).png";
@@ -286,7 +325,7 @@ public class OperationPage {
                     String dateOfIncident = DateOfIncidentField.getText();
                     String placeOfIncident = PlaceOfIncidentField.getText();
                     String damageOfProperty = DamageOfPropertyField.getText();
-                    controller.addOperation(incidentId, nameOfCaller, typeOfIncident, cause, noOfInjured,noOfCasualties, timeOfIncident, dateOfIncident, placeOfIncident, damageOfProperty);
+                    controller.insertOperation(incidentId, nameOfCaller, typeOfIncident, cause, noOfInjured,noOfCasualties, timeOfIncident, dateOfIncident, placeOfIncident, damageOfProperty);
             }
             });
         panel.add(SaveReport);

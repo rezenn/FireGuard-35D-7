@@ -36,7 +36,7 @@ public class RegisterPage {
 
         // Right panel for registration
         JPanel rightPanel = new JPanel(new BorderLayout());
-        rightPanel.setPreferredSize(new Dimension(600, 820));
+        rightPanel.setPreferredSize(new Dimension(550, 775));
         rightPanel.setBackground(bgColor);
         rightPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 70));
 
@@ -74,35 +74,47 @@ public class RegisterPage {
         formPanel.add(new JLabel("Email"), gbc);
         gbc.gridy = 4;
         formPanel.add(emailField, gbc);
+        
+         JLabel userTypeLabel = new JLabel("Select User Type");
+        gbc.gridy = 5;
+        formPanel.add(userTypeLabel, gbc);
+        String[] choices = {"Admin", "User"};
+        final JComboBox<String> dropDown = new JComboBox<>(choices);
+        dropDown.setBackground(Color.decode("#EFB481"));
+        dropDown.setFont(dropDown.getFont().deriveFont(14f));  
+        gbc.gridy = 6;
+        formPanel.add(dropDown, gbc);
+
 
         JPasswordField passwordField = createPasswordField(350, 50);
         gbc.gridx = 0;
-        gbc.gridy = 5;
+        gbc.gridy = 7;
         formPanel.add(new JLabel("Password"), gbc);
-        gbc.gridy = 6;
+        gbc.gridy = 8;
         formPanel.add(passwordField, gbc);
 
         JPasswordField confirmPasswordField = createPasswordField(350, 50);
         gbc.gridx = 0;
-        gbc.gridy = 7;
+        gbc.gridy = 9;
         formPanel.add(new JLabel("Confirm Password"), gbc);
-        gbc.gridy = 8;
+        gbc.gridy = 10;
         formPanel.add(confirmPasswordField, gbc);
-
+        
         JButton registerButton = createButton("Register", 350, 50);
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String fullName = fullNameField.getText();
                 String email = emailField.getText();
+                String userType = (String) dropDown.getSelectedItem();
                 String password = new String(passwordField.getPassword());
                 String confirmPassword = new String(confirmPasswordField.getPassword());
 
-                controller.registerUser(fullName, email, password, confirmPassword);
+                controller.registerUser(fullName, email, userType, password, confirmPassword);
             }
         });
         gbc.gridx = 0;
-        gbc.gridy = 9;
+        gbc.gridy = 11;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
         formPanel.add(registerButton, gbc);
@@ -123,7 +135,7 @@ public class RegisterPage {
                 frame.dispose();
             }
         });
-        gbc.gridy = 10;
+        gbc.gridy = 12;
         gbc.anchor = GridBagConstraints.CENTER;
         formPanel.add(login, gbc);
 

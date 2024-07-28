@@ -12,7 +12,7 @@ public class OperationController {
         this.operationDAO = operationDAO;
     }
 
-    public void addOperation(int incidentId, String nameOfCaller, String typeOfIncident, String cause, int noOfInjured,
+    public void insertOperation(int incidentId, String nameOfCaller, String typeOfIncident, String cause, int noOfInjured,
                              int noOfCasualties, String timeOfIncident, String dateOfIncident, String placeOfIncident, String damageOfProperty) {
         if (nameOfCaller.isEmpty() || typeOfIncident.isEmpty() || cause.isEmpty() || timeOfIncident.isEmpty() || 
             dateOfIncident.isEmpty() || placeOfIncident.isEmpty() || damageOfProperty.isEmpty()) {

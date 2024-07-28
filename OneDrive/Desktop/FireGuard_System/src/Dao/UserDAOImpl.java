@@ -18,17 +18,17 @@ public class UserDAOImpl implements UserDAO {
             conn = DriverManager.getConnection(JDBC_URL, DB_USERNAME, DB_PASSWORD);
         } catch (ClassNotFoundException | SQLException ex) {
             ex.printStackTrace();
-            // Handle connection failure properly
         }
     }
 
     @Override
     public boolean insertUser(User user) throws SQLException {
-        String sql = "INSERT INTO accounts (full_name, email, password) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO accounts (full_name, email, password, userType) VALUES (?, ?, ?, ?)";
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
             statement.setString(1, user.getFullName());
             statement.setString(2, user.getEmail());
             statement.setString(3, user.getPassword());
+            statement.setString(4, user.getUserType());
 
             int rowsInserted = statement.executeUpdate();
             return rowsInserted > 0;
@@ -46,30 +46,33 @@ public class UserDAOImpl implements UserDAO {
         // Implement delete logic
         return false;
     }
-@Override
-public User validateUser(String email, String password) {
-    User user = null;
-    String sql = "SELECT * FROM accounts WHERE email = ? AND password = ?";
-    try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USERNAME, DB_PASSWORD);
-         PreparedStatement statement = conn.prepareStatement(sql)) {
-        statement.setString(1, email);
-        statement.setString(2, password);
-        try (ResultSet resultSet = statement.executeQuery()) {
-            if (resultSet.next()) {
-                // Retrieve user data from ResultSet
-                String fullName = resultSet.getString("full_name");
-                String userEmail = resultSet.getString("email");
-                String userPassword = resultSet.getString("password");
 
-                // Create User object with retrieved data
-                user = new User(fullName, userEmail, userPassword);
-                // Optionally, set other properties of User if needed
+    @Override
+    public User validateUser(String email, String userType, String password) throws SQLException {
+        User user = null;
+        String sql = "SELECT * FROM accounts WHERE email = ? AND password = ? AND userType = ?";
+
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
+            statement.setString(1, email);
+            statement.setString(2, password);
+            statement.setString(3, userType);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    // Retrieve user data from ResultSet
+                    String fullName = resultSet.getString("full_name");
+                    String userEmail = resultSet.getString("email");
+                    String userPassword = resultSet.getString("password");
+                    String userTypeResult = resultSet.getString("userType");
+
+                    // Create User object with retrieved data
+                    user = new User(fullName, userEmail, userTypeResult, userPassword);
+                    // Optionally, set other properties of User if needed
+                }
             }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
-    } catch (SQLException ex) {
-        ex.printStackTrace();
-        // Handle SQL exception properly
+        return user;
     }
-    return user;
-}
 }

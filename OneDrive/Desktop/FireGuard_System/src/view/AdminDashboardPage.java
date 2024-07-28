@@ -1,8 +1,6 @@
 import Dao.User;
 import Dao.InventoryDAO;
 import Dao.InventoryDAOImpl;
-import dao.OperationDAO;
-import dao.OperationDAOImpl;
 import controller.InventoryController;
 import controller.OperationController;
 import controller.ScheduleController;
@@ -16,13 +14,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class DashboardPage {
+public class AdminDashboardPage {
     private JFrame frame;
 
-    public DashboardPage(User user) {
+    public AdminDashboardPage(User user) {
         SwingUtilities.invokeLater(() -> {
             // Create a JFrame (window)
-            frame = new JFrame("Dashboard");
+            frame = new JFrame("Admin Dashboard");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setLayout(new BorderLayout());
 
@@ -52,9 +50,9 @@ public class DashboardPage {
                 public void actionPerformed(ActionEvent e) {
                     ScheduleDAO scheduleDAO = new ScheduleDAOImpl();
                     ScheduleController scheduleController = new ScheduleController(scheduleDAO);
-                    ScheduleListUserPage scheduleListUserPage = new ScheduleListUserPage(scheduleController);
-                    scheduleListUserPage.setVisible(true);
-                    frame.dispose(); 
+                    SchedulePage schedulePage = new SchedulePage(scheduleController);
+                    schedulePage.setVisible(true);
+                    frame.dispose();
                 }
             });
 
@@ -68,49 +66,49 @@ public class DashboardPage {
                 public void actionPerformed(ActionEvent e) {
                     StaffDAO staffDAO = new StaffDAOImpl();
                     StaffController staffController = new StaffController(staffDAO);
-                    StaffListUserPage staffListUserPage = new StaffListUserPage(staffController);
-                    staffListUserPage.setVisible(true);
-                    frame.dispose(); 
+                    StaffPage staffPage = new StaffPage(staffController);
+                    staffPage.setVisible(true);
+                    frame.dispose();
                 }
             });
 
             // Operation button with text and image
-            String operationIconPath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuard_System\\src\\images\\download (6).png";
-            ImageIcon operationIcon = new ImageIcon(new ImageIcon(operationIconPath).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
-            JButton operationButton = new JButton("Operation", operationIcon);
-            configureButton(operationButton);
-            operationButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    OperationDAO operationDAO = new OperationDAOImpl();  // Replace with your implementation
-                    OperationController operationController = new OperationController(operationDAO);  // Replace with your implementation
-                    OperationPage operationPage = new OperationPage(operationController);
-                    operationPage.setVisible(true);
-                    frame.dispose();
-                }
-            });
+//            String operationIconPath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuard_System\\src\\images\\download (6).png";
+//            ImageIcon operationIcon = new ImageIcon(new ImageIcon(operationIconPath).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+//            JButton operationButton = new JButton("Operation", operationIcon);
+//            configureButton(operationButton);
+//            operationButton.addActionListener(new ActionListener() {
+//                @Override
+//                public void actionPerformed(ActionEvent e) {
+//                    OperationDAO operationDAO = new OperationDAOImpl();
+//                    OperationController operationController = new OperationController(operationDAO);
+//                    OperationPage operationPage = new OperationPage(operationController);
+//                    operationPage.setVisible(true);
+//                    frame.dispose();
+//                }
+//            });
 
             // Inventory button with text and image
-            String inventoryIconPath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuard_System\\src\\images\\download (2).png";
-            ImageIcon inventoryIcon = new ImageIcon(new ImageIcon(inventoryIconPath).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
-            JButton inventoryButton = new JButton("Inventory", inventoryIcon);
-            configureButton(inventoryButton);
-            inventoryButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    InventoryDAO inventoryDAO = new InventoryDAOImpl();  // Replace with your implementation
-                    InventoryController inventoryController = new InventoryController(inventoryDAO);  // Replace with your implementation
-                    InventoryPage inventoryPage = new InventoryPage(inventoryController);
-                    inventoryPage.setVisible(true);
-                    frame.dispose();
-                }
-            });
-
-            // Report button with text and image
-            String reportIconPath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuard_System\\src\\images\\download (7).png";
-            ImageIcon reportIcon = new ImageIcon(new ImageIcon(reportIconPath).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
-            JButton reportButton = new JButton("Reports", reportIcon);
-            configureButton(reportButton);
+//            String inventoryIconPath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuard_System\\src\\images\\download (2).png";
+//            ImageIcon inventoryIcon = new ImageIcon(new ImageIcon(inventoryIconPath).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+//            JButton inventoryButton = new JButton("Inventory", inventoryIcon);
+//            configureButton(inventoryButton);
+//            inventoryButton.addActionListener(new ActionListener() {
+//                @Override
+//                public void actionPerformed(ActionEvent e) {
+//                    InventoryDAO inventoryDAO = new InventoryDAOImpl();
+//                    InventoryController inventoryController = new InventoryController(inventoryDAO);
+//                    InventoryPage inventoryPage = new InventoryPage(inventoryController);
+//                    inventoryPage.setVisible(true);
+//                    frame.dispose();
+//                }
+//            });
+//
+//            // Report button with text and image
+//            String reportIconPath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuard_System\\src\\images\\download (7).png";
+//            ImageIcon reportIcon = new ImageIcon(new ImageIcon(reportIconPath).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+//            JButton reportButton = new JButton("Reports", reportIcon);
+//            configureButton(reportButton);
 
             // Create a panel with BoxLayout to stack image and buttons vertically
             JPanel stackPanel = new JPanel();
@@ -124,11 +122,11 @@ public class DashboardPage {
             stackPanel.add(createVerticalSpacing(20));
             stackPanel.add(staffButton);
             stackPanel.add(createVerticalSpacing(20));
-            stackPanel.add(operationButton);
-            stackPanel.add(createVerticalSpacing(20));
-            stackPanel.add(inventoryButton);
-            stackPanel.add(createVerticalSpacing(20));
-            stackPanel.add(reportButton);
+//            stackPanel.add(operationButton);
+//            stackPanel.add(createVerticalSpacing(20));
+//            stackPanel.add(inventoryButton);
+//            stackPanel.add(createVerticalSpacing(20));
+//            stackPanel.add(reportButton);
 
             // Image panel with BorderLayout
             JPanel imagePanel = new JPanel(new BorderLayout());
@@ -141,23 +139,9 @@ public class DashboardPage {
             controlPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
 
             // Content Panel in the center with null layout for absolute positioning
-            JPanel contentPanel = new JPanel(null);  // Using null layout for absolute positioning
+            JPanel contentPanel = new JPanel(null);
             contentPanel.setBackground(Color.WHITE);
             contentPanel.setBorder(BorderFactory.createLineBorder(Color.decode("#FFDEC8"), 1));
-
-            // Load and resize the map image
-            String mapIconPath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuard_System\\src\\images\\Map.png";
-            ImageIcon mapOriginalIcon = new ImageIcon(mapIconPath);
-            Image mapOriginalImage = mapOriginalIcon.getImage();
-            int mapWidth = 501;  // Set desired width
-            int mapHeight = 331;  // Set desired height
-            Image mapResizedImage = mapOriginalImage.getScaledInstance(mapWidth, mapHeight, Image.SCALE_SMOOTH);
-            ImageIcon mapResizedIcon = new ImageIcon(mapResizedImage);
-            JLabel mapLabel = new JLabel(mapResizedIcon);
-            mapLabel.setBounds(700, 400, mapWidth, mapHeight); // Set bounds for absolute positioning
-
-            // Add mapLabel to contentPanel
-            contentPanel.add(mapLabel);
 
             // Add panels to the frame
             frame.add(imagePanel, BorderLayout.WEST);
@@ -195,6 +179,6 @@ public class DashboardPage {
     public static void main(String[] args) {
         // Assuming User is already defined and available
         User user = new User();
-        new DashboardPage(user).setVisible(true);
+        new AdminDashboardPage(user).setVisible(true);
     }
 }

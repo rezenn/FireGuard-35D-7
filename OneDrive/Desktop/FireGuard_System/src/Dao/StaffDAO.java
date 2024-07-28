@@ -1,13 +1,12 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package Dao;
+package dao;
 
-/**
- *
- * @author Asus
- */
-public class StaffDAO {
-    
+import model.Staff;
+import java.sql.SQLException;
+import java.util.List;
+
+public interface StaffDAO {
+    Staff getStaffById(int id) throws SQLException;
+    void updateStaff(Staff staff) throws SQLException;
+    boolean insertStaff(Staff staff) throws SQLException;
+    List<Staff> getAllStaffs() throws SQLException;
 }

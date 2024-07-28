@@ -2,7 +2,6 @@ import Dao.InventoryDAO;
 import Dao.InventoryDAOImpl;
 import controller.InventoryController;
 import model.Inventory;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;

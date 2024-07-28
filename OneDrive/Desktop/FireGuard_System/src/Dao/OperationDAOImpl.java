@@ -104,9 +104,4 @@ public  class OperationDAOImpl implements OperationDAO {
             }
         }
     }
-
-    @Override
-    public void addOperation(Operation operation) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 }
