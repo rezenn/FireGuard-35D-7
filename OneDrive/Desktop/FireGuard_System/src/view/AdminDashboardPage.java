@@ -1,8 +1,4 @@
 import Dao.User;
-import Dao.InventoryDAO;
-import Dao.InventoryDAOImpl;
-import controller.InventoryController;
-import controller.OperationController;
 import controller.ScheduleController;
 import controller.StaffController;
 import dao.ScheduleDAO;
@@ -20,16 +16,19 @@ public class AdminDashboardPage {
     public AdminDashboardPage(User user) {
         SwingUtilities.invokeLater(() -> {
             // Create a JFrame (window)
-            frame = new JFrame("Admin Dashboard");
+            frame = new JFrame("FireGuard");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setLayout(new BorderLayout());
+        
+            ImageIcon logo = new ImageIcon(getClass().getResource("/images/Logo.png"));
+            frame.setIconImage(logo.getImage());
 
             // Image Panel on the left
-            String imagePath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuard_System\\src\\images\\SytemLogo.png";
+            String imagePath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuard_System\\src\\images\\SystemLogo.png";
             ImageIcon originalIcon = new ImageIcon(imagePath);
             Image originalImage = originalIcon.getImage();
-            int newWidth = 203;
-            int newHeight = 185;
+            int newWidth = 210;
+            int newHeight = 170;
             Image resizedImage = originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
             ImageIcon resizedIcon = new ImageIcon(resizedImage);
             JLabel imageLabel = new JLabel(resizedIcon);

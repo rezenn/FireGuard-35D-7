@@ -13,9 +13,12 @@ public class LoginPage {
         this.controller = controller;
 
         // Create JFrame (window)
-        frame = new JFrame("Login Page");
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame = new JFrame("FireGuard");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
+        
+        ImageIcon logo = new ImageIcon(getClass().getResource("/images/Logo.png"));
+        frame.setIconImage(logo.getImage());
 
         // Set background color for the content pane
         Color bgColor = Color.decode("#FFDEC8");

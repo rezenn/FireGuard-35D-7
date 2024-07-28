@@ -16,10 +16,14 @@ public class ScheduleListPage {
         this.controller = controller;
                 
         SwingUtilities.invokeLater(() -> {
-        frame = new JFrame("Schedule");
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        
+        frame = new JFrame("FireGuard");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
         
+        ImageIcon logo = new ImageIcon(getClass().getResource("/images/Logo.png"));
+        frame.setIconImage(logo.getImage());
+
         JPanel panel = new JPanel(new BorderLayout());
         frame.add(panel);
         

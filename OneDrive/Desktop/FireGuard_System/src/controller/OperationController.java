@@ -4,6 +4,7 @@ import dao.OperationDAO;
 import model.Operation;
 import javax.swing.*;
 import java.sql.SQLException;
+import java.util.List;
 
 public class OperationController {
     private OperationDAO operationDAO;
@@ -34,4 +35,8 @@ public class OperationController {
             }
         }
     }
+    public List<Operation> getAllOperations() throws SQLException {
+        return operationDAO.getAllOperations();
+    }
+    
 }

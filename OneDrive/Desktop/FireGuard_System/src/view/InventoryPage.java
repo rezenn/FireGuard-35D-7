@@ -25,17 +25,21 @@ public class InventoryPage {
 
     public InventoryPage(InventoryController controller) {
         this.controller = controller;
-            // Create a JFrame (window).
-            frame = new JFrame("Dashboard");
+                       
+        // Create a JFrame (window)
+            frame = new JFrame("FireGuard");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setLayout(new BorderLayout());
+        
+            ImageIcon logo = new ImageIcon(getClass().getResource("/images/Logo.png"));
+            frame.setIconImage(logo.getImage());
 
             // Image Panel on the left
-            String imagePath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuard_System\\src\\images\\SytemLogo.png";
+            String imagePath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuard_System\\src\\images\\SystemLogo.png";
             ImageIcon originalIcon = new ImageIcon(imagePath);
             Image originalImage = originalIcon.getImage();
-            int newWidth = 203;
-            int newHeight = 185;
+            int newWidth = 210;
+            int newHeight = 170;
             Image resizedImage = originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
             ImageIcon resizedIcon = new ImageIcon(resizedImage);
             JLabel imageLabel = new JLabel(resizedIcon);
@@ -116,6 +120,17 @@ public class InventoryPage {
             ImageIcon reportIcon = new ImageIcon(new ImageIcon(reportIconPath).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
             JButton reportButton = new JButton("Reports", reportIcon);
             configureButton(reportButton);
+            reportButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    OperationDAO operationDAO = new OperationDAOImpl();  // Replace with your implementation
+                    OperationController operationController = new OperationController(operationDAO);  // Replace with your implementation
+                    ReportPage reportPage = new ReportPage(operationController);
+                    reportPage.setVisible(true);
+                    frame.dispose();
+                }
+            });
+            
              // Create a panel with BoxLayout to stack image and buttons vertically
              JPanel stackPanel = new JPanel();
              stackPanel.setLayout(new BoxLayout(stackPanel, BoxLayout.Y_AXIS));

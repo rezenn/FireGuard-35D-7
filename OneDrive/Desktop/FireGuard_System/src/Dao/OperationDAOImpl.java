@@ -6,6 +6,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public  class OperationDAOImpl implements OperationDAO {
     private static final String JDBC_URL = "jdbc:mysql://localhost:3306/fireGuard";
@@ -93,15 +95,32 @@ public  class OperationDAOImpl implements OperationDAO {
             throw new SQLException("Failed to insert operation into the database", e);
         }
     }
+    @Override
+    public List<Operation> getAllOperations() throws SQLException {
+        List<Operation> operations = new ArrayList<>();
+        String sql = "SELECT * FROM operation";
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
+            ResultSet resultSet = statement.executeQuery();
 
-    // Method to close the connection
-    public void close() {
-        if (conn != null) {
-            try {
-                conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            while (resultSet.next()) {
+                Operation operation = new Operation(
+                    resultSet.getInt("incidentId"),
+                    resultSet.getString("nameOfCaller"),
+                    resultSet.getString("typeOfIncident"),
+                    resultSet.getString("cause"),
+                    resultSet.getInt("noOfInjured"),
+                    resultSet.getInt("noOfCasualties"),
+                    resultSet.getString("timeOfIncident"),
+                    resultSet.getString("dateOfIncident"),
+                    resultSet.getString("placeOfIncident"),
+                    resultSet.getString("damageOfProperty")
+                );
+                operations.add(operation);
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLException("Failed to retrieve operations from the database", e);
         }
+        return operations;
     }
 }

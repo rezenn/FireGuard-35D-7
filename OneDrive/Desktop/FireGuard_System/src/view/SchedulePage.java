@@ -19,16 +19,19 @@ public class SchedulePage {
     public SchedulePage(ScheduleController controller) {
         this.controller = controller;
             // Create a JFrame (window).
-            frame = new JFrame("Schedule");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setLayout(new BorderLayout());
+        frame = new JFrame("FireGuard");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLayout(new BorderLayout());
+        
+        ImageIcon logo = new ImageIcon(getClass().getResource("/images/Logo.png"));
+        frame.setIconImage(logo.getImage());
 
             // Image Panel on the left
-            String imagePath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuard_System\\src\\images\\SytemLogo.png";
+            String imagePath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuard_System\\src\\images\\SystemLogo.png";
             ImageIcon originalIcon = new ImageIcon(imagePath);
             Image originalImage = originalIcon.getImage();
-            int newWidth = 203;
-            int newHeight = 185;
+            int newWidth = 210;
+            int newHeight = 170;
             Image resizedImage = originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
             ImageIcon resizedIcon = new ImageIcon(resizedImage);
             JLabel imageLabel = new JLabel(resizedIcon);
@@ -61,11 +64,6 @@ public class SchedulePage {
             ImageIcon staffIcon = new ImageIcon(new ImageIcon(staffIconPath).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
             JButton staffButton = new JButton("Staff", staffIcon);
             configureButton(staffButton);
-            
-            String staffViewIconPath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuard_System\\src\\images\\download.png";
-            ImageIcon staffViewIcon = new ImageIcon(new ImageIcon(staffViewIconPath).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
-            JButton staffViewButton = new JButton("View Schedule ", staffViewIcon);
-            configureButton(staffViewButton);
             staffButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -107,7 +105,7 @@ public class SchedulePage {
  
             JPanel panel = new JPanel();
             panel.setBackground(Color.decode("#FFDEC8"));
-            panel.setBounds(300, 70, 950, 610);
+            panel.setBounds(300, 70, 1150, 710);
             frame.add(panel);
 
             JLabel inventory = new JLabel("Add New Schedule");
@@ -209,7 +207,7 @@ public class SchedulePage {
             AddSchedule.setForeground(Color.WHITE);
             AddSchedule.setFocusPainted(false);
             AddSchedule.setFont(new Font("Arial",Font.PLAIN, 24)); 
-            AddSchedule.setBounds(100, 500, 270, 60);
+            AddSchedule.setBounds(100, 630, 270, 60);
             AddSchedule.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -219,7 +217,6 @@ public class SchedulePage {
                 String email = emailField.getText();
                 String date = dateField.getText();
                 String shift = shiftField.getText();
-
 
                 controller.addSchedule(name, rank, phone_number, email, date, shift);
 
@@ -232,7 +229,7 @@ public class SchedulePage {
             DisplayButton.setForeground(Color.WHITE);
             DisplayButton.setFocusPainted(false);
             DisplayButton.setFont(new Font("Arial", Font.PLAIN, 24));
-            DisplayButton.setBounds(500, 500, 270, 60);
+            DisplayButton.setBounds(500, 630, 270, 60);
             DisplayButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {

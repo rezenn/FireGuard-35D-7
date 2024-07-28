@@ -14,9 +14,12 @@ public class RegisterPage {
         this.controller = controller;
 
         // Create a JFrame (window)..
-        frame = new JFrame("Register Page");
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame = new JFrame("FireGuard");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
+        
+        ImageIcon logo = new ImageIcon(getClass().getResource("/images/Logo.png"));
+        frame.setIconImage(logo.getImage());
 
         Color bgColor = Color.decode("#FFDEC8");
         frame.getContentPane().setBackground(bgColor);
