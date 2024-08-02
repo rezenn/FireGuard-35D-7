@@ -9,4 +9,6 @@ public interface StaffDAO {
     void updateStaff(Staff staff) throws SQLException;
     boolean insertStaff(Staff staff) throws SQLException;
     List<Staff> getAllStaffs() throws SQLException;
+    void deleteStaff(String name)throws SQLException ;
+
 }

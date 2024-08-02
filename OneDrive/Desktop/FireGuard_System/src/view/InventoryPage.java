@@ -1,3 +1,4 @@
+import Dao.DashboardDAO;
 import Dao.InventoryDAO;
 import Dao.InventoryDAOImpl;
 import Dao.User;
@@ -52,8 +53,8 @@ public class InventoryPage {
             dashboardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                UserDAO userDAO = new UserDAOImpl();
-                DashboardController dashboardController = new DashboardController(userDAO);
+                DashboardDAO dashboardDAO = new DashboardDAOImpl();
+                DashboardController dashboardController = new DashboardController(dashboardDAO);
                 User User = null;
                 DashboardPage dashboardPage = new DashboardPage(User);
                 dashboardPage.setVisible(true);
@@ -101,8 +102,8 @@ public class InventoryPage {
             operationButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    OperationDAO operationDAO = new OperationDAOImpl();  // Replace with your implementation
-                    OperationController operationController = new OperationController(operationDAO);  // Replace with your implementation
+                    OperationDAO operationDAO = new OperationDAOImpl();  
+                    OperationController operationController = new OperationController(operationDAO);  
                     OperationPage operationPage = new OperationPage(operationController);
                     operationPage.setVisible(true);
                     frame.dispose();
@@ -123,8 +124,8 @@ public class InventoryPage {
             reportButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    OperationDAO operationDAO = new OperationDAOImpl();  // Replace with your implementation
-                    OperationController operationController = new OperationController(operationDAO);  // Replace with your implementation
+                    OperationDAO operationDAO = new OperationDAOImpl();  
+                    OperationController operationController = new OperationController(operationDAO);  
                     ReportPage reportPage = new ReportPage(operationController);
                     reportPage.setVisible(true);
                     frame.dispose();
@@ -279,7 +280,7 @@ public class InventoryPage {
             AddInventory.setForeground(Color.WHITE);
             AddInventory.setFocusPainted(false);
             AddInventory.setFont(new Font("Arial",Font.PLAIN, 24)); 
-            AddInventory.setBounds(100, 640, 270, 60);
+            AddInventory.setBounds(50, 640, 250, 60);
             AddInventory.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -296,12 +297,36 @@ public class InventoryPage {
             });
         panel.add(AddInventory);
         
+        JButton UpdateInventoryButton = new JButton("Update Inventory");
+        UpdateInventoryButton.setLayout(null);
+        UpdateInventoryButton.setBackground(Color.decode("#01520E"));
+        UpdateInventoryButton.setForeground(Color.WHITE);
+        UpdateInventoryButton.setFocusPainted(false);
+        UpdateInventoryButton.setFont(new Font("Arial", Font.PLAIN, 24));
+        UpdateInventoryButton.setBounds(350, 640, 250, 60);
+        UpdateInventoryButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String name = nameField.getText();
+               String category = categoryField.getText();
+               String serialCode = codeField.getText();
+               String quantity = quanityField.getText();
+               String manufactureDate = manufactureField.getText();
+               String expiryDate = expiryField.getText();
+               String description = descriptionArea.getText();
+               controller.updateInventory(name, category, serialCode, quantity, manufactureDate, expiryDate, description);
+
+            }
+            });
+        panel.add(UpdateInventoryButton);
+            
+        
          JButton DisplayButton = new JButton("Display Items");
             DisplayButton.setBackground(Color.decode("#01520E"));
             DisplayButton.setForeground(Color.WHITE);
             DisplayButton.setFocusPainted(false);
             DisplayButton.setFont(new Font("Arial", Font.PLAIN, 24));
-            DisplayButton.setBounds(500, 640, 270, 60);
+            DisplayButton.setBounds(650, 640, 250, 60);
             DisplayButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {

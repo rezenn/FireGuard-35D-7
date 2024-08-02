@@ -35,6 +35,25 @@ public class StaffController {
             }
         }
     }
+    public void updateStaff(String name, String staff_id, String rank, String age, String phone_number, String email, String address, String recruit_date) {
+        if (name.isEmpty() || staff_id.isEmpty() || rank.isEmpty() || age.isEmpty() || phone_number.isEmpty() || email.isEmpty() || address.isEmpty() || recruit_date.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please fill in all required fields", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            try {
+                int ageInt = Integer.parseInt(age); // Ensure age is a valid integer
+                Staff staff = new Staff(name, staff_id, rank, ageInt, phone_number, email, address, recruit_date);
+                staffDAO.updateStaff(staff);
+                    JOptionPane.showMessageDialog(null, "staff updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Database error occurred. Failed to update staff.", "Database Error", JOptionPane.ERROR_MESSAGE);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, "Invalid age format. Please enter a valid number.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
 
     public List<Staff> getAllStaffs() {
         try {
@@ -44,5 +63,13 @@ public class StaffController {
             JOptionPane.showMessageDialog(null, "Failed to retrieve staffs: " + ex.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
             return new ArrayList<>();
         }
+    }
+    public void deleteStaff(String name)throws SQLException  {
+    try {
+        staffDAO.deleteStaff(name);
+    }catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Failed to delete staff item from database.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
     }
 }

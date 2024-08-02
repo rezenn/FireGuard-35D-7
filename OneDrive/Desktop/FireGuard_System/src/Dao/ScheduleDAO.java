@@ -9,5 +9,7 @@ public interface ScheduleDAO {
     void updateSchedule(Schedule schedule) throws SQLException;
     boolean insertSchedule(Schedule schedule) throws SQLException;
     List<Schedule> getAllSchedules() throws SQLException;
+    void deleteScheduleByPhoneNumber(String phoneNumber) throws SQLException;
+
 }
 

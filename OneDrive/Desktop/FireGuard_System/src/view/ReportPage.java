@@ -1,3 +1,4 @@
+import Dao.DashboardDAO;
 import Dao.InventoryDAO;
 import Dao.InventoryDAOImpl;
 import Dao.User;
@@ -64,8 +65,8 @@ public class ReportPage {
         dashboardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                UserDAO userDAO = new UserDAOImpl();
-                DashboardController dashboardController = new DashboardController(userDAO);
+                 DashboardDAO dashboardDAO = new DashboardDAOImpl();
+                DashboardController dashboardController = new DashboardController(dashboardDAO);
                 User User = null;
                 DashboardPage dashboardPage = new DashboardPage(User);
                 dashboardPage.setVisible(true);

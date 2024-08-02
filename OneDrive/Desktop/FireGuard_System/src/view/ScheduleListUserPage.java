@@ -1,3 +1,4 @@
+import Dao.DashboardDAO;
 import Dao.InventoryDAO;
 import Dao.InventoryDAOImpl;
 import Dao.User;
@@ -58,8 +59,8 @@ public class ScheduleListUserPage {
             dashboardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                UserDAO userDAO = new UserDAOImpl();
-                DashboardController dashboardController = new DashboardController(userDAO);
+                 DashboardDAO dashboardDAO = new DashboardDAOImpl();
+                DashboardController dashboardController = new DashboardController(dashboardDAO);
                 User User = null;
                 DashboardPage dashboardPage = new DashboardPage(User);
                 dashboardPage.setVisible(true);
@@ -97,8 +98,8 @@ public class ScheduleListUserPage {
             operationButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    OperationDAO operationDAO = new OperationDAOImpl();  // Replace with your implementation
-                    OperationController operationController = new OperationController(operationDAO);  // Replace with your implementation
+                    OperationDAO operationDAO = new OperationDAOImpl();  
+                    OperationController operationController = new OperationController(operationDAO);  
                     OperationPage operationPage = new OperationPage(operationController);
                     operationPage.setVisible(true);
                     frame.dispose();
@@ -113,8 +114,8 @@ public class ScheduleListUserPage {
             inventoryButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    InventoryDAO inventoryDAO = new InventoryDAOImpl();  // Replace with your implementation
-                    InventoryController inventoryController = new InventoryController(inventoryDAO);  // Replace with your implementation
+                    InventoryDAO inventoryDAO = new InventoryDAOImpl();  
+                    InventoryController inventoryController = new InventoryController(inventoryDAO);  
                     InventoryPage inventoryPage = new InventoryPage(inventoryController);
                     inventoryPage.setVisible(true);
                     frame.dispose();
@@ -129,8 +130,8 @@ public class ScheduleListUserPage {
             reportButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    OperationDAO operationDAO = new OperationDAOImpl();  // Replace with your implementation
-                    OperationController operationController = new OperationController(operationDAO);  // Replace with your implementation
+                    OperationDAO operationDAO = new OperationDAOImpl();  
+                    OperationController operationController = new OperationController(operationDAO);  
                     ReportPage reportPage = new ReportPage(operationController);
                     reportPage.setVisible(true);
                     frame.dispose();

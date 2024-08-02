@@ -1,13 +1,28 @@
 package controller;
 
+import Dao.DashboardDAO;
 import Dao.UserDAO;
+import java.sql.SQLException;
+
 
 public class DashboardController {
-    private UserDAO userDAO;
+    private DashboardDAO dashboardDAO;
 
-    public DashboardController(UserDAO userDAO) {
-        this.userDAO = userDAO;
+    public DashboardController(DashboardDAO dashboardDAO) {
+        this.dashboardDAO = dashboardDAO;
     }
 
-    // Add any methods to interact with UserDAO here
+    public int getStaffCount() throws SQLException {
+        return dashboardDAO.countStaffs();
+    }
+    public int getInventoryCount() throws SQLException {
+        return dashboardDAO.countInventories();
+    }
+    public int getReportCount() throws SQLException {
+        return dashboardDAO.countReports();
+    }
+    public int getScheduleCount() throws SQLException {
+        return dashboardDAO.countSchedules();
+    }
+    
 }

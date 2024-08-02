@@ -1,3 +1,4 @@
+import Dao.DashboardDAO;
 import Dao.InventoryDAO;
 import Dao.InventoryDAOImpl;
 import dao.OperationDAO;
@@ -51,10 +52,10 @@ public class OperationPage {
         dashboardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                UserDAO userDAO = new UserDAOImpl();
-                DashboardController dashboardController = new DashboardController(userDAO);
-                User user = null; // Initialize user if needed
-                DashboardPage dashboardPage = new DashboardPage(user);
+                 DashboardDAO dashboardDAO = new DashboardDAOImpl();
+                DashboardController dashboardController = new DashboardController(dashboardDAO);
+                User User = null;
+                DashboardPage dashboardPage = new DashboardPage(User);
                 dashboardPage.setVisible(true);
                 frame.dispose();
             }
@@ -122,8 +123,8 @@ public class OperationPage {
         reportButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    OperationDAO operationDAO = new OperationDAOImpl();  // Replace with your implementation
-                    OperationController operationController = new OperationController(operationDAO);  // Replace with your implementation
+                    OperationDAO operationDAO = new OperationDAOImpl();  
+                    OperationController operationController = new OperationController(operationDAO);  
                     ReportPage reportPage = new ReportPage(operationController);
                     reportPage.setVisible(true);
                     frame.dispose();
@@ -316,15 +317,13 @@ public class OperationPage {
             DamageOfPropertyField.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));  
             panel.add(DamageOfPropertyField);
 
-          
-
             JButton SaveReport = new JButton("Save Operation");
             SaveReport.setLayout(null);
             SaveReport.setBackground(Color.decode("#01520E"));
             SaveReport.setForeground(Color.WHITE);
             SaveReport.setFocusPainted(false);
             SaveReport.setFont(new Font("Arial",Font.PLAIN, 24)); 
-            SaveReport.setBounds(400, 640, 370, 60);
+            SaveReport.setBounds(250, 640, 250, 60);
             SaveReport.addActionListener(new ActionListener() {
              @Override
                 public void actionPerformed(ActionEvent e) {
@@ -343,23 +342,31 @@ public class OperationPage {
             });
         panel.add(SaveReport);
         
-         JButton DisplayButton = new JButton("Display Report");
-            DisplayButton.setBackground(Color.decode("#01520E"));
-            DisplayButton.setForeground(Color.WHITE);
-            DisplayButton.setFocusPainted(false);
-            DisplayButton.setFont(new Font("Arial", Font.PLAIN, 24));
-            DisplayButton.setBounds(500, 640, 270, 60);
-            DisplayButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    OperationDAO operationDAO = new OperationDAOImpl();
-                    OperationController operationController = new OperationController(operationDAO);
-                 //   OperationListPage operationListPage = new OperationListPage(operationController);
-                 //   operationListPage.setVisible(true);
-                    frame.dispose(); 
-                }
-            });
-            panel.add(DisplayButton);
+        JButton UpdateOperationButton = new JButton("Update Operation");
+        UpdateOperationButton.setLayout(null);
+        UpdateOperationButton.setBackground(Color.decode("#01520E"));
+        UpdateOperationButton.setForeground(Color.WHITE);
+        UpdateOperationButton.setFocusPainted(false);
+        UpdateOperationButton.setFont(new Font("Arial", Font.PLAIN, 24));
+        UpdateOperationButton.setBounds(510, 640, 250, 60);
+        UpdateOperationButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int incidentId = Integer.parseInt(IncidentField.getText());
+                String nameOfCaller = callerField.getText();
+                String typeOfIncident = typeOfIncidentField.getText();
+                String cause = CauseField.getText();
+                int noOfInjured = Integer.parseInt(InjuredField.getText());
+                int noOfCasualties = Integer.parseInt(NoOfCasualtiesField.getText());
+                String timeOfIncident = TimeOfIncidentField.getText();
+                String dateOfIncident = DateOfIncidentField.getText();
+                String placeOfIncident = PlaceOfIncidentField.getText();
+                String damageOfProperty = DamageOfPropertyField.getText();
+                controller.updateOperation(incidentId, nameOfCaller, typeOfIncident, cause, noOfInjured, noOfCasualties, timeOfIncident, dateOfIncident, placeOfIncident, damageOfProperty);
+            }
+        });
+        panel.add(UpdateOperationButton);
+        
             // Create a panel to add margins around the right panel
             JPanel rightPanelWithMargin = new JPanel(new BorderLayout());
             rightPanelWithMargin.setBorder(BorderFactory.createEmptyBorder(80, 80, 80, 80));

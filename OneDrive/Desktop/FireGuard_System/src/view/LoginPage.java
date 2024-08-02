@@ -74,28 +74,58 @@ public class LoginPage {
         formPanel.add(emailLabel, gbc);
         gbc.gridy = 2;
         formPanel.add(emailField, gbc);
-
-        // Password field
-        JPasswordField passwordField = createPasswordField(350, 50);
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        JLabel passwordLabel = new JLabel("Password");
-        formPanel.add(passwordLabel, gbc);
-        gbc.gridy = 4;
-        formPanel.add(passwordField, gbc);
         
-         JLabel userTypeLabel = new JLabel("Select User Type");
-        gbc.gridy = 5;
+        JLabel userTypeLabel = new JLabel("Select User Type");
+        gbc.gridy = 3;
         formPanel.add(userTypeLabel, gbc);
         String[] choices = {"Admin", "User"};
         final JComboBox<String> dropDown = new JComboBox<>(choices);
         dropDown.setBackground(Color.decode("#EFB481"));
         dropDown.setFont(dropDown.getFont().deriveFont(14f));  // Set font size to 16
-        gbc.gridy = 6;
+        gbc.gridy = 4;
         gbc.ipady = 10;
         formPanel.add(dropDown, gbc);
+        
+        // Password field
+        JPasswordField passwordField = createPasswordField(350, 50);
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        JLabel passwordLabel = new JLabel("Password");
+        formPanel.add(passwordLabel, gbc);
+        gbc.gridy = 6;
+        JPanel passwordPanel = new JPanel(new BorderLayout());
+        passwordPanel.setOpaque(false);
+        passwordPanel.add(passwordField, BorderLayout.CENTER);
+        
+        // Toggle visibility button with images
+        ImageIcon showIcon = resizeImage(new ImageIcon(getClass().getResource("/images/show.png")), 24, 24);
+        ImageIcon hideIcon = resizeImage(new ImageIcon(getClass().getResource("/images/hide.png")), 24, 24);
+        JButton toggleButton = new JButton(showIcon);
+        toggleButton.setPreferredSize(new Dimension(40, 40));
+        toggleButton.setBackground(Color.decode("#EFB481"));
+        toggleButton.setBorderPainted(false);
+        toggleButton.setFocusPainted(false);
 
+        toggleButton.addActionListener(new ActionListener() {
+            private boolean isPasswordVisible = false;
 
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (isPasswordVisible) {
+                    passwordField.setEchoChar('*');
+                    toggleButton.setIcon(showIcon);
+                } else {
+                    passwordField.setEchoChar((char) 0); // Show password
+                    toggleButton.setIcon(hideIcon);
+                }
+                isPasswordVisible = !isPasswordVisible;
+            }
+        });
+        
+        passwordPanel.add(toggleButton, BorderLayout.EAST);
+        formPanel.add(passwordPanel, gbc);
+
+       
         // Login button
         JButton loginButton = createButton("Login", 350, 50);
         loginButton.addActionListener(new ActionListener() {
@@ -204,6 +234,12 @@ public class LoginPage {
         ));
         button.setFocusPainted(false);
         return button;
+    }
+
+     private static ImageIcon resizeImage(ImageIcon originalIcon, int width, int height) {
+        Image originalImage = originalIcon.getImage();
+        Image resizedImage = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        return new ImageIcon(resizedImage);
     }
 
     public void setVisible(boolean isVisible) {

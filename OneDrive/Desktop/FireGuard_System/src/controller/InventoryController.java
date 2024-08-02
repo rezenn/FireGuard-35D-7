@@ -34,6 +34,21 @@ public class InventoryController {
             }
         }
     }
+    public void updateInventory(String name, String category, String serialCode, String quantity, String manufactureDate, String expiryDate, String description) {
+        if (name.isEmpty() || category.isEmpty() || serialCode.isEmpty() || quantity.isEmpty() || manufactureDate.isEmpty() || expiryDate.isEmpty() || description.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please fill in all required fields", "Error", JOptionPane.ERROR_MESSAGE);
+        }else{
+            try {
+                Inventory inventory = new Inventory(name, category, serialCode, quantity, manufactureDate, expiryDate, description);
+                inventoryDAO.updateInventory(inventory);
+                    JOptionPane.showMessageDialog(null, "Inventory updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Database error occurred. Failed to update inventory.", "Database Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
     public List<Inventory> getAllInventories() {
         try {
             return inventoryDAO.getAllInventories();
@@ -43,16 +58,13 @@ public class InventoryController {
             return new ArrayList<>();
         }
     }
-
-
-
-//    public void openDashboard() {
-//        SwingUtilities.invokeLater(new Runnable() {
-//            public void run() {
-//                DashboardPage dashboardPage = new DashboardPage();
-//                dashboardPage.setVisible(true);
-//            }
-//        });
-//    }
+      public void deleteItem(String name) {
+    try {
+        inventoryDAO.deleteItem(name);
+    } catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Failed to delete inventory item from database.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+}
 
 }

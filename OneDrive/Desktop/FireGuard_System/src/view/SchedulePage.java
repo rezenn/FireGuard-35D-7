@@ -1,3 +1,4 @@
+import Dao.DashboardDAO;
 import Dao.User;
 import Dao.UserDAO;
 import Dao.UserDAOImpl;
@@ -44,8 +45,8 @@ public class SchedulePage {
             dashboardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                UserDAO userDAO = new UserDAOImpl();
-                DashboardController dashboardController = new DashboardController(userDAO);
+                 DashboardDAO dashboardDAO = new DashboardDAOImpl();
+                DashboardController dashboardController = new DashboardController(dashboardDAO);
                 User User = null;
                 AdminDashboardPage dashboardPage = new AdminDashboardPage(User);
                 dashboardPage.setVisible(true);
@@ -207,7 +208,7 @@ public class SchedulePage {
             AddSchedule.setForeground(Color.WHITE);
             AddSchedule.setFocusPainted(false);
             AddSchedule.setFont(new Font("Arial",Font.PLAIN, 24)); 
-            AddSchedule.setBounds(100, 630, 270, 60);
+            AddSchedule.setBounds(50, 630, 250, 60);
             AddSchedule.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -223,13 +224,34 @@ public class SchedulePage {
             }
         });
         panel.add(AddSchedule);
+         JButton UpdateSchedule = new JButton("Update Schedule");
+            UpdateSchedule.setBackground(Color.decode("#01520E"));
+            UpdateSchedule.setForeground(Color.WHITE);
+            UpdateSchedule.setFocusPainted(false);
+            UpdateSchedule.setFont(new Font("Arial",Font.PLAIN, 24)); 
+            UpdateSchedule.setBounds(350, 630, 250, 60);
+            UpdateSchedule.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String name = nameField.getText();
+                String rank = rankField.getText();
+                String phone_number = phone_numberField.getText();
+                String email = emailField.getText();
+                String date = dateField.getText();
+                String shift = shiftField.getText();
+
+                controller.updateSchedule(name, rank, phone_number, email, date, shift);
+
+            }
+        });
+        panel.add(UpdateSchedule);
         
          JButton DisplayButton = new JButton("Display Schedule");
             DisplayButton.setBackground(Color.decode("#01520E"));
             DisplayButton.setForeground(Color.WHITE);
             DisplayButton.setFocusPainted(false);
             DisplayButton.setFont(new Font("Arial", Font.PLAIN, 24));
-            DisplayButton.setBounds(500, 630, 270, 60);
+            DisplayButton.setBounds(650, 630, 250, 60);
             DisplayButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {

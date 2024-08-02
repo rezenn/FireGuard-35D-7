@@ -34,6 +34,30 @@ public class ScheduleController {
             }
         }
     }
+    public void updateSchedule(String name, String rank, String phone_number,String email, String date, String shift) {
+        if (name.isEmpty() || rank.isEmpty() || phone_number.isEmpty() ||email.isEmpty() || date.isEmpty() || shift.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please fill in all required fields", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            try {
+                Schedule schedule = new Schedule(name, rank, phone_number, email, date, shift);
+                scheduleDAO.updateSchedule(schedule);
+                    JOptionPane.showMessageDialog(null, "schedule updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Database error occurred. Failed to update schedule.", "Database Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    public void deleteSchedule(String phoneNumber) {
+        try {
+        scheduleDAO.deleteScheduleByPhoneNumber(phoneNumber);
+    } catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Failed to delete schedule item from database.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    }
 
     public List<Schedule> getAllSchedules() {
         try {

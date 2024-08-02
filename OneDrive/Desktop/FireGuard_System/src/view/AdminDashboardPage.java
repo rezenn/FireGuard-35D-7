@@ -1,4 +1,8 @@
+import Dao.DashboardDAO;
 import Dao.User;
+import Dao.UserDAO;
+import Dao.UserDAOImpl;
+import controller.DashboardController;
 import controller.ScheduleController;
 import controller.StaffController;
 import dao.ScheduleDAO;
@@ -9,6 +13,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class AdminDashboardPage {
     private JFrame frame;
@@ -71,44 +77,24 @@ public class AdminDashboardPage {
                 }
             });
 
-            // Operation button with text and image
-//            String operationIconPath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuard_System\\src\\images\\download (6).png";
-//            ImageIcon operationIcon = new ImageIcon(new ImageIcon(operationIconPath).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
-//            JButton operationButton = new JButton("Operation", operationIcon);
-//            configureButton(operationButton);
-//            operationButton.addActionListener(new ActionListener() {
-//                @Override
-//                public void actionPerformed(ActionEvent e) {
-//                    OperationDAO operationDAO = new OperationDAOImpl();
-//                    OperationController operationController = new OperationController(operationDAO);
-//                    OperationPage operationPage = new OperationPage(operationController);
-//                    operationPage.setVisible(true);
-//                    frame.dispose();
-//                }
-//            });
-
-            // Inventory button with text and image
-//            String inventoryIconPath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuard_System\\src\\images\\download (2).png";
-//            ImageIcon inventoryIcon = new ImageIcon(new ImageIcon(inventoryIconPath).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
-//            JButton inventoryButton = new JButton("Inventory", inventoryIcon);
-//            configureButton(inventoryButton);
-//            inventoryButton.addActionListener(new ActionListener() {
-//                @Override
-//                public void actionPerformed(ActionEvent e) {
-//                    InventoryDAO inventoryDAO = new InventoryDAOImpl();
-//                    InventoryController inventoryController = new InventoryController(inventoryDAO);
-//                    InventoryPage inventoryPage = new InventoryPage(inventoryController);
-//                    inventoryPage.setVisible(true);
-//                    frame.dispose();
-//                }
-//            });
-//
-//            // Report button with text and image
-//            String reportIconPath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuard_System\\src\\images\\download (7).png";
-//            ImageIcon reportIcon = new ImageIcon(new ImageIcon(reportIconPath).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
-//            JButton reportButton = new JButton("Reports", reportIcon);
-//            configureButton(reportButton);
-
+            String logoutIconPath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuard_System\\src\\images\\log-out.png";
+            ImageIcon logoutIcon = new ImageIcon(new ImageIcon(logoutIconPath).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+            JButton logoutButton = new JButton("Logout", logoutIcon);
+            configureButton(logoutButton);
+            logoutButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    int response = JOptionPane.showConfirmDialog(frame, "Are you sure you want to log out?", "Logout Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+                    if (response == JOptionPane.YES_OPTION) {
+                        UserDAO userDAO = new UserDAOImpl();  
+                        LoginController loginController = new LoginController();  
+                        LoginPage loginPage = new LoginPage(loginController);
+                        loginPage.setVisible(true);
+                        frame.dispose();
+                    }
+                }
+            });
+            
             // Create a panel with BoxLayout to stack image and buttons vertically
             JPanel stackPanel = new JPanel();
             stackPanel.setLayout(new BoxLayout(stackPanel, BoxLayout.Y_AXIS));
@@ -121,12 +107,9 @@ public class AdminDashboardPage {
             stackPanel.add(createVerticalSpacing(20));
             stackPanel.add(staffButton);
             stackPanel.add(createVerticalSpacing(20));
-//            stackPanel.add(operationButton);
-//            stackPanel.add(createVerticalSpacing(20));
-//            stackPanel.add(inventoryButton);
-//            stackPanel.add(createVerticalSpacing(20));
-//            stackPanel.add(reportButton);
-
+            stackPanel.add(logoutButton);
+            stackPanel.add(createVerticalSpacing(20));
+          
             // Image panel with BorderLayout
             JPanel imagePanel = new JPanel(new BorderLayout());
             imagePanel.setBackground(Color.decode("#FFDEC8"));
@@ -142,6 +125,120 @@ public class AdminDashboardPage {
             contentPanel.setBackground(Color.WHITE);
             contentPanel.setBorder(BorderFactory.createLineBorder(Color.decode("#FFDEC8"), 1));
 
+            
+            LocalDateTime currentDateTime = LocalDateTime.now();
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+            String formattedDate = currentDateTime.format(dateFormatter);
+            String formattedTime = currentDateTime.format(timeFormatter);
+
+            JLabel dateLabel = new JLabel("Date: " + formattedDate);
+            dateLabel.setFont(new Font("Helvetica", Font.BOLD, 16));
+            JLabel timeLabel = new JLabel("Time: " + formattedTime);
+            timeLabel.setFont(new Font("Helvetica", Font.BOLD, 16));
+
+            controlPanel.add(dateLabel);
+            controlPanel.add(timeLabel);
+            Timer timer = new Timer(1000, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    LocalDateTime now = LocalDateTime.now();
+                    String updatedTime = now.format(timeFormatter);
+                    timeLabel.setText("Time: " + updatedTime);
+                }
+            });
+            timer.start();
+
+           
+            int staffCount = 0;
+            try {
+                DashboardDAO dashboardDAO = new DashboardDAOImpl();
+                DashboardController dashboardController = new DashboardController(dashboardDAO);
+                staffCount = dashboardController.getStaffCount();
+            } catch (java.sql.SQLException e) {
+                e.printStackTrace();
+            }
+            
+            int inventoryCount = 0;
+            try {
+                DashboardDAO dashboardDAO = new DashboardDAOImpl();
+                DashboardController dashboardController = new DashboardController(dashboardDAO);
+                inventoryCount = dashboardController.getInventoryCount();
+            } catch (java.sql.SQLException e) {
+                e.printStackTrace();
+            }
+            int reportCount = 0;
+            try {
+                DashboardDAO dashboardDAO = new DashboardDAOImpl();
+                DashboardController dashboardController = new DashboardController(dashboardDAO);
+                reportCount = dashboardController.getReportCount();
+            } catch (java.sql.SQLException e) {
+                e.printStackTrace();
+            }
+            int scheduleCount = 0;
+            try {
+                DashboardDAO dashboardDAO = new DashboardDAOImpl();
+                DashboardController dashboardController = new DashboardController(dashboardDAO);
+                scheduleCount = dashboardController.getScheduleCount();
+            } catch (java.sql.SQLException e) {
+                e.printStackTrace();
+            }
+            
+            JPanel staffShow = new JPanel();
+            staffShow.setBackground(Color.decode("#FFDEC8"));
+            staffShow.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+            staffShow.setBounds(300, 150, 250, 130);
+            frame.add(staffShow);
+            
+           JTextArea staffCountArea = new JTextArea("Total Staffs\n\n" +"         " + staffCount);
+           staffCountArea.setBounds(50, 70, 150, 150);
+           staffCountArea.setFont(new Font("Verdana", Font.BOLD, 24));
+           staffCountArea.setOpaque(false); 
+           staffCountArea.setEditable(false); 
+           staffCountArea.setAlignmentX(JTextArea.CENTER_ALIGNMENT); 
+           staffShow.add(staffCountArea);
+           
+            JPanel inventoryShow = new JPanel();
+            inventoryShow.setBackground(Color.decode("#FFDEC8"));
+            inventoryShow.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+            inventoryShow.setBounds(700, 150, 250, 130);
+            frame.add(inventoryShow);
+            
+           JTextArea inventoryCountShow = new JTextArea("Total Inventories\n\n" +"            " +inventoryCount);
+           inventoryCountShow.setBounds(50, 70, 150, 150);
+           inventoryCountShow.setFont(new Font("Verdana", Font.BOLD, 24));
+           inventoryCountShow.setOpaque(false); 
+           inventoryCountShow.setEditable(false); 
+           inventoryCountShow.setAlignmentX(JTextArea.CENTER_ALIGNMENT); 
+           inventoryShow.add(inventoryCountShow);
+           
+           JPanel reportShow = new JPanel();
+            reportShow.setBackground(Color.decode("#FFDEC8"));
+            reportShow.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+            reportShow.setBounds(1100, 150, 250, 130);
+            frame.add(reportShow);
+            
+           JTextArea reportCountShow = new JTextArea("Total Reports\n\n" +"           " +reportCount);
+           reportCountShow.setBounds(50, 70, 150, 150);
+           reportCountShow.setFont(new Font("Verdana", Font.BOLD, 24));
+           reportCountShow.setOpaque(false); 
+           reportCountShow.setEditable(false); 
+           reportCountShow.setAlignmentX(JTextArea.CENTER_ALIGNMENT); 
+           reportShow.add(reportCountShow);
+           
+           JPanel scheduleShow = new JPanel();
+            scheduleShow.setBackground(Color.decode("#FFDEC8"));
+            scheduleShow.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+            scheduleShow.setBounds(300, 350, 250, 130);
+            frame.add(scheduleShow);
+            
+           JTextArea scheduleCountShow = new JTextArea("Total Schedules\n\n" +"           " +scheduleCount);
+           scheduleCountShow.setBounds(50, 70, 150, 150);
+           scheduleCountShow.setFont(new Font("Verdana", Font.BOLD, 24));
+           scheduleCountShow.setOpaque(false); 
+           scheduleCountShow.setEditable(false); 
+           scheduleCountShow.setAlignmentX(JTextArea.CENTER_ALIGNMENT); 
+           scheduleShow.add(scheduleCountShow);
             // Add panels to the frame
             frame.add(imagePanel, BorderLayout.WEST);
             frame.add(controlPanel, BorderLayout.NORTH);

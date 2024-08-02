@@ -1,3 +1,4 @@
+import Dao.DashboardDAO;
 import Dao.User;
 import Dao.UserDAO;
 import Dao.UserDAOImpl;
@@ -46,8 +47,8 @@ public class StaffPage {
             dashboardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                UserDAO userDAO = new UserDAOImpl();
-                DashboardController dashboardController = new DashboardController(userDAO);
+                 DashboardDAO dashboardDAO = new DashboardDAOImpl();
+                DashboardController dashboardController = new DashboardController(dashboardDAO);
                 User User = null;
                 AdminDashboardPage dashboardPage = new AdminDashboardPage(User);
                 dashboardPage.setVisible(true);
@@ -234,7 +235,7 @@ public class StaffPage {
             AddStaff.setForeground(Color.WHITE);
             AddStaff.setFocusPainted(false);
             AddStaff.setFont(new Font("Arial",Font.PLAIN, 24)); 
-            AddStaff.setBounds(100, 630, 270, 60);
+            AddStaff.setBounds(50, 630, 250, 60);
             AddStaff.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -253,12 +254,37 @@ public class StaffPage {
         });
         panel.add(AddStaff);
         
+        JButton UpdateStaffButton = new JButton("Update Staff");
+        UpdateStaffButton.setLayout(null);
+        UpdateStaffButton.setBackground(Color.decode("#01520E"));
+        UpdateStaffButton.setForeground(Color.WHITE);
+        UpdateStaffButton.setFocusPainted(false);
+        UpdateStaffButton.setFont(new Font("Arial", Font.PLAIN, 24));
+        UpdateStaffButton.setBounds(350, 630, 250, 60);
+        UpdateStaffButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String name = nameField.getText();
+                String staff_id = staff_idField.getText();
+                String rank = rankField.getText();
+                String age = ageField.getText();
+                String phone_number = phone_numberField.getText();
+                String email = emailField.getText();
+                String address = addressField.getText();
+                String recruit_date = recruit_dateField.getText();
+
+                controller.updateStaff(name, staff_id, rank, age, phone_number, email, address, recruit_date);
+
+            }
+        });
+        panel.add(UpdateStaffButton);
+            
          JButton DisplayButton = new JButton("Display Staff");
             DisplayButton.setBackground(Color.decode("#01520E"));
             DisplayButton.setForeground(Color.WHITE);
             DisplayButton.setFocusPainted(false);
             DisplayButton.setFont(new Font("Arial", Font.PLAIN, 24));
-            DisplayButton.setBounds(500, 630, 270, 60);
+            DisplayButton.setBounds(650, 630, 250, 60);
             DisplayButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {

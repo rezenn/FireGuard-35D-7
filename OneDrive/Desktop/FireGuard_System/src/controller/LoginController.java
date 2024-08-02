@@ -15,10 +15,10 @@ public class LoginController {
         try {
             User user = userDao.validateUser(email, userType, password);
             if (user != null) {
-                System.out.println("Login successful for userType: " + user.getUserType());
+            JOptionPane.showMessageDialog(null, "Login successful! Welcome " + user.getFullName());
+
                 openDashboard(user);
             } else {
-                System.out.println("Invalid credentials for email: " + email);
                 JOptionPane.showMessageDialog(null, "Invalid Credentials", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } catch (SQLException e) {

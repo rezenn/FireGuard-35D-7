@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserDAOImpl implements UserDAO {
-    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/fireGuard";
+    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/fireguard";
     private static final String DB_USERNAME = "root";
     private static final String DB_PASSWORD = "root";
     private Connection conn;

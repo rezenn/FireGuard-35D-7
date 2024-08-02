@@ -89,20 +89,80 @@ public class RegisterPage {
         formPanel.add(dropDown, gbc);
 
 
-        JPasswordField passwordField = createPasswordField(350, 50);
+        JPasswordField passwordField = createPasswordField(300, 50);
         gbc.gridx = 0;
         gbc.gridy = 7;
-        formPanel.add(new JLabel("Password"), gbc);
+        JLabel passwordLabel = new JLabel("Password");
+        formPanel.add(passwordLabel, gbc);
         gbc.gridy = 8;
-        formPanel.add(passwordField, gbc);
+        JPanel passwordPanel = new JPanel(new BorderLayout());
+        passwordPanel.setOpaque(false);
+        passwordPanel.add(passwordField, BorderLayout.CENTER);
+        
+        ImageIcon showIcon = resizeImage(new ImageIcon(getClass().getResource("/images/show.png")), 20, 20);
+        ImageIcon hideIcon = resizeImage(new ImageIcon(getClass().getResource("/images/hide.png")), 20, 20);
+        JButton toggleButton = new JButton(showIcon);
+        toggleButton.setPreferredSize(new Dimension(50, 50));
+        toggleButton.setBackground(Color.decode("#EFB481"));
+        toggleButton.setBorderPainted(false);
+        toggleButton.setFocusPainted(false);
 
-        JPasswordField confirmPasswordField = createPasswordField(350, 50);
+        toggleButton.addActionListener(new ActionListener() {
+            private boolean isPasswordVisible = false;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (isPasswordVisible) {
+                    passwordField.setEchoChar('*');
+                    toggleButton.setIcon(showIcon);
+                } else {
+                    passwordField.setEchoChar((char) 0); // Show password
+                    toggleButton.setIcon(hideIcon);
+                }
+                isPasswordVisible = !isPasswordVisible;
+            }
+        });
+        
+        passwordPanel.add(toggleButton, BorderLayout.EAST);
+        formPanel.add(passwordPanel, gbc);
+
+        JPasswordField ConfirmPasswordField = createPasswordField(300, 50);
         gbc.gridx = 0;
         gbc.gridy = 9;
-        formPanel.add(new JLabel("Confirm Password"), gbc);
+        JLabel ConfirmPasswordLabel = new JLabel("Confirm Password");
+        formPanel.add(ConfirmPasswordLabel, gbc);
         gbc.gridy = 10;
-        formPanel.add(confirmPasswordField, gbc);
+        JPanel ConfirmPasswordPanel = new JPanel(new BorderLayout());
+        ConfirmPasswordPanel.setOpaque(false);
+        ConfirmPasswordPanel.add(ConfirmPasswordField, BorderLayout.CENTER);
         
+        ImageIcon showIcon1 = resizeImage(new ImageIcon(getClass().getResource("/images/show.png")), 20, 20);
+        ImageIcon hideIcon1 = resizeImage(new ImageIcon(getClass().getResource("/images/hide.png")), 20, 20);
+        JButton toggleButton1 = new JButton(showIcon1);
+        toggleButton1.setPreferredSize(new Dimension(50, 50));
+        toggleButton1.setBackground(Color.decode("#EFB481"));
+        toggleButton1.setBorderPainted(false);
+        toggleButton1.setFocusPainted(false);
+
+        toggleButton1.addActionListener(new ActionListener() {
+            private boolean isPasswordVisible = false;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (isPasswordVisible) {
+                    ConfirmPasswordField.setEchoChar('*');
+                    toggleButton1.setIcon(showIcon1);
+                } else {
+                    ConfirmPasswordField.setEchoChar((char) 0); // Show password
+                    toggleButton1.setIcon(hideIcon1);
+                }
+                isPasswordVisible = !isPasswordVisible;
+            }
+        });
+        
+        ConfirmPasswordPanel.add(toggleButton1, BorderLayout.EAST);
+        formPanel.add(ConfirmPasswordPanel, gbc);
+
         JButton registerButton = createButton("Register", 350, 50);
         registerButton.addActionListener(new ActionListener() {
             @Override
@@ -111,7 +171,7 @@ public class RegisterPage {
                 String email = emailField.getText();
                 String userType = (String) dropDown.getSelectedItem();
                 String password = new String(passwordField.getPassword());
-                String confirmPassword = new String(confirmPasswordField.getPassword());
+                String confirmPassword = new String(ConfirmPasswordField.getPassword());
 
                 controller.registerUser(fullName, email, userType, password, confirmPassword);
             }
@@ -205,6 +265,12 @@ public class RegisterPage {
         ));
         button.setFocusPainted(false);
         return button;
+    }
+
+    private static ImageIcon resizeImage(ImageIcon originalIcon, int width, int height) {
+        Image originalImage = originalIcon.getImage();
+        Image resizedImage = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        return new ImageIcon(resizedImage);
     }
 
     // Method to set the visibility of the frame

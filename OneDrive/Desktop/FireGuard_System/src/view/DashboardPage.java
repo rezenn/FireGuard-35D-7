@@ -1,6 +1,10 @@
-import Dao.User;
+import Dao.DashboardDAO;
+ import Dao.User;
 import Dao.InventoryDAO;
 import Dao.InventoryDAOImpl;
+import Dao.UserDAO;
+import Dao.UserDAOImpl;
+import controller.DashboardController;
 import dao.OperationDAO;
 import dao.OperationDAOImpl;
 import controller.InventoryController;
@@ -15,9 +19,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.time.LocalDateTime;  
+import java.time.format.DateTimeFormatter; 
 
 public class DashboardPage {
     private JFrame frame;
+    private JLabel staffCountLabel;
+
 
     public DashboardPage(User user) {
         SwingUtilities.invokeLater(() -> {
@@ -85,8 +95,8 @@ public class DashboardPage {
             operationButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    OperationDAO operationDAO = new OperationDAOImpl();  // Replace with your implementation
-                    OperationController operationController = new OperationController(operationDAO);  // Replace with your implementation
+                    OperationDAO operationDAO = new OperationDAOImpl();  
+                    OperationController operationController = new OperationController(operationDAO);  
                     OperationPage operationPage = new OperationPage(operationController);
                     operationPage.setVisible(true);
                     frame.dispose();
@@ -101,8 +111,8 @@ public class DashboardPage {
             inventoryButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    InventoryDAO inventoryDAO = new InventoryDAOImpl();  // Replace with your implementation
-                    InventoryController inventoryController = new InventoryController(inventoryDAO);  // Replace with your implementation
+                    InventoryDAO inventoryDAO = new InventoryDAOImpl();  
+                    InventoryController inventoryController = new InventoryController(inventoryDAO);  
                     InventoryPage inventoryPage = new InventoryPage(inventoryController);
                     inventoryPage.setVisible(true);
                     frame.dispose();
@@ -117,14 +127,30 @@ public class DashboardPage {
             reportButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    OperationDAO operationDAO = new OperationDAOImpl();  // Replace with your implementation
-                    OperationController operationController = new OperationController(operationDAO);  // Replace with your implementation
+                    OperationDAO operationDAO = new OperationDAOImpl();  
+                    OperationController operationController = new OperationController(operationDAO);  
                     ReportPage reportPage = new ReportPage(operationController);
                     reportPage.setVisible(true);
                     frame.dispose();
                 }
             });
-
+            String logoutIconPath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuard_System\\src\\images\\log-out.png";
+            ImageIcon logoutIcon = new ImageIcon(new ImageIcon(logoutIconPath).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+            JButton logoutButton = new JButton("Logout", logoutIcon);
+            configureButton(logoutButton);
+            logoutButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    int response = JOptionPane.showConfirmDialog(frame, "Are you sure you want to log out?", "Logout Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+                    if (response == JOptionPane.YES_OPTION) {
+                        UserDAO userDAO = new UserDAOImpl(); 
+                        LoginController loginController = new LoginController(); 
+                        LoginPage loginPage = new LoginPage(loginController);
+                        loginPage.setVisible(true);
+                        frame.dispose();
+                    }
+                }
+            });
             // Create a panel with BoxLayout to stack image and buttons vertically
             JPanel stackPanel = new JPanel();
             stackPanel.setLayout(new BoxLayout(stackPanel, BoxLayout.Y_AXIS));
@@ -142,6 +168,8 @@ public class DashboardPage {
             stackPanel.add(inventoryButton);
             stackPanel.add(createVerticalSpacing(20));
             stackPanel.add(reportButton);
+            stackPanel.add(createVerticalSpacing(20));
+            stackPanel.add(logoutButton);
 
             // Image panel with BorderLayout
             JPanel imagePanel = new JPanel(new BorderLayout());
@@ -157,21 +185,99 @@ public class DashboardPage {
             JPanel contentPanel = new JPanel(null);  // Using null layout for absolute positioning
             contentPanel.setBackground(Color.WHITE);
             contentPanel.setBorder(BorderFactory.createLineBorder(Color.decode("#FFDEC8"), 1));
+             
+            LocalDateTime currentDateTime = LocalDateTime.now();
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+            String formattedDate = currentDateTime.format(dateFormatter);
+            String formattedTime = currentDateTime.format(timeFormatter);
 
-            // Load and resize the map image
-            String mapIconPath = "C:\\Users\\Asus\\OneDrive\\Desktop\\FireGuard_System\\src\\images\\Map.png";
-            ImageIcon mapOriginalIcon = new ImageIcon(mapIconPath);
-            Image mapOriginalImage = mapOriginalIcon.getImage();
-            int mapWidth = 501;  // Set desired width
-            int mapHeight = 331;  // Set desired height
-            Image mapResizedImage = mapOriginalImage.getScaledInstance(mapWidth, mapHeight, Image.SCALE_SMOOTH);
-            ImageIcon mapResizedIcon = new ImageIcon(mapResizedImage);
-            JLabel mapLabel = new JLabel(mapResizedIcon);
-            mapLabel.setBounds(700, 400, mapWidth, mapHeight); // Set bounds for absolute positioning
+            JLabel dateLabel = new JLabel("Date: " + formattedDate);
+            dateLabel.setFont(new Font("Helvetica", Font.BOLD, 16));
+            JLabel timeLabel = new JLabel("Time: " + formattedTime);
+            timeLabel.setFont(new Font("Helvetica", Font.BOLD, 16));
 
-            // Add mapLabel to contentPanel
-            contentPanel.add(mapLabel);
+            controlPanel.add(dateLabel);
+            controlPanel.add(timeLabel);
+            Timer timer = new Timer(1000, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    LocalDateTime now = LocalDateTime.now();
+                    String updatedTime = now.format(timeFormatter);
+                    timeLabel.setText("Time: " + updatedTime);
+                }
+            });
+            timer.start();
 
+           
+            int staffCount = 0;
+            try {
+                DashboardDAO dashboardDAO = new DashboardDAOImpl();
+                DashboardController dashboardController = new DashboardController(dashboardDAO);
+                staffCount = dashboardController.getStaffCount();
+            } catch (java.sql.SQLException e) {
+                e.printStackTrace();
+            }
+            
+            int inventoryCount = 0;
+            try {
+                DashboardDAO dashboardDAO = new DashboardDAOImpl();
+                DashboardController dashboardController = new DashboardController(dashboardDAO);
+                inventoryCount = dashboardController.getInventoryCount();
+            } catch (java.sql.SQLException e) {
+                e.printStackTrace();
+            }
+            int reportCount = 0;
+            try {
+                DashboardDAO dashboardDAO = new DashboardDAOImpl();
+                DashboardController dashboardController = new DashboardController(dashboardDAO);
+                reportCount = dashboardController.getReportCount();
+            } catch (java.sql.SQLException e) {
+                e.printStackTrace();
+            }
+           
+            JPanel staffShow = new JPanel();
+            staffShow.setBackground(Color.decode("#FFDEC8"));
+            staffShow.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+            staffShow.setBounds(300, 150, 250, 130);
+            frame.add(staffShow);
+            
+           JTextArea staffCountArea = new JTextArea("Total Staffs\n\n" +"         " + staffCount);
+           staffCountArea.setBounds(50, 70, 150, 150);
+           staffCountArea.setFont(new Font("Verdana", Font.BOLD, 24));
+           staffCountArea.setOpaque(false); 
+           staffCountArea.setEditable(false); 
+           staffCountArea.setAlignmentX(JTextArea.CENTER_ALIGNMENT); 
+           staffShow.add(staffCountArea);
+           
+            JPanel inventoryShow = new JPanel();
+            inventoryShow.setBackground(Color.decode("#FFDEC8"));
+            inventoryShow.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+            inventoryShow.setBounds(700, 150, 250, 130);
+            frame.add(inventoryShow);
+            
+           JTextArea inventoryCountShow = new JTextArea("Total Inventories\n\n" +"            " +inventoryCount);
+           inventoryCountShow.setBounds(50, 70, 150, 150);
+           inventoryCountShow.setFont(new Font("Verdana", Font.BOLD, 24));
+           inventoryCountShow.setOpaque(false); 
+           inventoryCountShow.setEditable(false); 
+           inventoryCountShow.setAlignmentX(JTextArea.CENTER_ALIGNMENT); 
+           inventoryShow.add(inventoryCountShow);
+           
+           JPanel reportShow = new JPanel();
+            reportShow.setBackground(Color.decode("#FFDEC8"));
+            reportShow.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+            reportShow.setBounds(1100, 150, 250, 130);
+            frame.add(reportShow);
+            
+           JTextArea reportCountShow = new JTextArea("Total Reports\n\n" +"           " +reportCount);
+           reportCountShow.setBounds(50, 70, 150, 150);
+           reportCountShow.setFont(new Font("Verdana", Font.BOLD, 24));
+           reportCountShow.setOpaque(false); 
+           reportCountShow.setEditable(false); 
+           reportCountShow.setAlignmentX(JTextArea.CENTER_ALIGNMENT); 
+           reportShow.add(reportCountShow);
+            
             // Add panels to the frame
             frame.add(imagePanel, BorderLayout.WEST);
             frame.add(controlPanel, BorderLayout.NORTH);
@@ -209,5 +315,15 @@ public class DashboardPage {
         // Assuming User is already defined and available
         User user = new User();
         new DashboardPage(user).setVisible(true);
+    }
+
+    private static class SQLException {
+
+        public SQLException() {
+        }
+
+        private void printStackTrace() {
+            throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        }
     }
 }

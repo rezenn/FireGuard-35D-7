@@ -3,11 +3,14 @@ import Dao.InventoryDAOImpl;
 import controller.InventoryController;
 import model.Inventory;
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.sql.SQLException;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.table.DefaultTableModel;
 import java.util.List;
+
 
 public class InventoryListPage {
     private JFrame frame;
@@ -19,9 +22,9 @@ public class InventoryListPage {
 
         SwingUtilities.invokeLater(() -> {
             frame = new JFrame("FireGuard");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             frame.setLayout(new BorderLayout());
-        
+
             ImageIcon logo = new ImageIcon(getClass().getResource("/images/Logo.png"));
             frame.setIconImage(logo.getImage());
 
@@ -39,9 +42,18 @@ public class InventoryListPage {
             JScrollPane scrollPane = new JScrollPane(inventoryTable);
             panel.add(scrollPane, BorderLayout.CENTER);
 
-            updateInventoryTable();
+           JButton deleteButton = new JButton("Delete");
+            panel.add(deleteButton, BorderLayout.SOUTH);
+            deleteButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    deleteSelectedRow();
+                }
+            });
+            
+            panel.add(deleteButton, BorderLayout.SOUTH);
 
-        
+            updateInventoryTable();
 
             // Set frame size and make it visible
             frame.setSize(800, 600);
@@ -56,13 +68,13 @@ public class InventoryListPage {
         model.setRowCount(0); // Clear existing rows
         for (Inventory item : inventoryList) {
             model.addRow(new Object[]{
-                    item.getName(),
-                    item.getCategory(),
-                    item.getSerialCode(),
-                    item.getQuantity(),
-                    item.getManufactureDate(),
-                    item.getExpiryDate(),
-                    item.getDescription()
+                item.getName(),
+                item.getCategory(),
+                item.getSerialCode(),
+                item.getQuantity(),
+                item.getManufactureDate(),
+                item.getExpiryDate(),
+                item.getDescription()
             });
         }
     }
@@ -75,6 +87,28 @@ public class InventoryListPage {
         frame.dispose();
     }
 
+   private void deleteSelectedRow() {
+    int selectedRow = inventoryTable.getSelectedRow();
+    if (selectedRow != -1) {
+        DefaultTableModel model = (DefaultTableModel) inventoryTable.getModel();
+        String name = (String) model.getValueAt(selectedRow, 0); // Assuming name is in the 1st column
+        
+        // Remove the row from the table
+        model.removeRow(selectedRow);
+        
+        // Delete the entry from the database
+        try {
+            controller.deleteItem(name);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(frame, "Failed to delete inventory item from database.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    } else {
+        JOptionPane.showMessageDialog(frame, "No row selected for deletion.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+}
+
+    
     public static void main(String[] args) {
         InventoryDAO inventoryDAO = new InventoryDAOImpl();
         InventoryController controller = new InventoryController(inventoryDAO);
@@ -83,4 +117,6 @@ public class InventoryListPage {
             new InventoryListPage(controller).setVisible(true);
         });
     }
+
+    
 }

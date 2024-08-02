@@ -7,7 +7,7 @@ import java.util.List;
 import java.sql.Connection;
 
 public class StaffDAOImpl implements StaffDAO {
-    private static final String jdbcUrl = "jdbc:mysql://localhost:3306/fireGuard";
+    private static final String jdbcUrl = "jdbc:mysql://localhost:3306/fireguard";
     private static final String dbUsername = "root";
     private static final String dbPassword = "root";
     private Connection conn;
@@ -103,8 +103,28 @@ public class StaffDAOImpl implements StaffDAO {
             statement.setString(6, staff.getAddress());
             statement.setString(7, staff.getRecruit_date());
             statement.setString(8, staff.getStaff_id());
-
-            statement.executeUpdate();
+            int rowsUpdated = statement.executeUpdate();
+            
+            if (rowsUpdated == 0) {
+                System.out.println("No staff item found with the staff id : " + staff.getStaff_id());
+            } else {
+                System.out.println("Staff item with staff " + staff.getStaff_id() + " updated successfully.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLException("Failed to update inventory in the database", e);
+        }
+    }
+    @Override
+    public void deleteStaff(String name)throws SQLException  {
+        String sql = "DELETE FROM staff WHERE name = ?";
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
+            statement.setString(1, name);
+           int rowsAffected = statement.executeUpdate();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLException("Failed to delete staff from the database", e);
         }
     }
 }

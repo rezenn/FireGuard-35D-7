@@ -5,6 +5,8 @@ import model.Schedule;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 public class ScheduleListPage {
@@ -18,7 +20,7 @@ public class ScheduleListPage {
         SwingUtilities.invokeLater(() -> {
         
         frame = new JFrame("FireGuard");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLayout(new BorderLayout());
         
         ImageIcon logo = new ImageIcon(getClass().getResource("/images/Logo.png"));
@@ -38,6 +40,15 @@ public class ScheduleListPage {
         JScrollPane scrollPane = new JScrollPane(scheduleTable);
         panel.add(scrollPane, BorderLayout.CENTER);
         
+        JButton deleteButton = new JButton("Delete");
+            panel.add(deleteButton, BorderLayout.SOUTH);
+            deleteButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    deleteSelectedRow();
+                }
+            });
+            
         updateScheduleTable();
         
         frame.setSize(800, 600);
@@ -67,7 +78,22 @@ public class ScheduleListPage {
         frame.dispose();
     }
     
-
+    private void deleteSelectedRow() {
+        int selectedRow = scheduleTable.getSelectedRow();
+        if (selectedRow != -1) {
+            DefaultTableModel model = (DefaultTableModel) scheduleTable.getModel();
+            String phoneNumber = (String) model.getValueAt(selectedRow, 2); // Assuming phone number is in the 3rd column
+            
+            // Remove the row from the table
+            model.removeRow(selectedRow);
+            
+            // Remove the entry from the database
+            controller.deleteSchedule(phoneNumber); // You need to implement this method in the controller
+        } else {
+            JOptionPane.showMessageDialog(frame, "No row selected for deletion.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
     public static void main(String[] args) {
         ScheduleDAO scheduleDAO = new ScheduleDAOImpl();
         ScheduleController controller = new ScheduleController(scheduleDAO);
