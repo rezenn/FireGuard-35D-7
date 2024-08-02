@@ -43,6 +43,11 @@ public class StaffListPage {
         panel.add(scrollPane, BorderLayout.CENTER);
         
         JButton deleteButton = new JButton("Delete");
+        deleteButton.setBackground(Color.decode("#01520E"));
+            deleteButton.setForeground(Color.WHITE);
+            deleteButton.setFocusPainted(false);
+            deleteButton.setFont(new Font("Arial",Font.PLAIN, 24));   
+           
             panel.add(deleteButton, BorderLayout.SOUTH);
             deleteButton.addActionListener(new ActionListener() {
                 @Override

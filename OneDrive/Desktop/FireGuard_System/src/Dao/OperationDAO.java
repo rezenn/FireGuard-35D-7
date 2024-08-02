@@ -9,5 +9,6 @@ public interface OperationDAO {
     void updateOperation(Operation operation) throws SQLException;
     boolean insertOperation(Operation operation) throws SQLException;
     List<Operation> getAllOperations() throws SQLException;
+    void deleteOperation(int incident_id) throws SQLException;
 
 }

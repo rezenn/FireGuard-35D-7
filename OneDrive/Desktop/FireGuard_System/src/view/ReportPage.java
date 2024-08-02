@@ -25,6 +25,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
 
 public class ReportPage {
     private JFrame frame;
@@ -132,11 +133,6 @@ public class ReportPage {
         JButton reportButton = new JButton("Reports", reportIcon);
         configureButton(reportButton);
         reportButton.addActionListener(e -> {
-            // Avoid reloading the ReportPage from the button click
-            // Commented out to prevent recursive loading
-            // ReportPage reportPage = new ReportPage(operationController);
-            // reportPage.setVisible(true);
-            // frame.dispose();
         });
 
         // Create a panel with BoxLayout to stack image and buttons vertically
@@ -225,7 +221,6 @@ public class ReportPage {
     operationList.setBackground(Color.decode("#FFDEC8"));
     operationList.setFont(new Font("Arial", Font.BOLD, 18));
 
-
     JScrollPane listScrollPane = new JScrollPane(operationList);
     listScrollPane.setPreferredSize(new Dimension(150, 400));
 
@@ -249,12 +244,33 @@ public class ReportPage {
     contentPanel.setPreferredSize(new Dimension(100, 100)); 
     contentPanel.setBorder(BorderFactory.createEmptyBorder(100, 100, 100, 100));
 
+    JButton deleteButton = new JButton("Delete");
+    deleteButton.setBackground(Color.decode("#01520E"));
+    deleteButton.setForeground(Color.WHITE);
+    deleteButton.setFocusPainted(false);
+    deleteButton.setFont(new Font("Arial", Font.PLAIN, 24)); 
+    deleteButton.setBounds(350, 570, 250, 60);
+
+    // Add delete button action listener
+    deleteButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            deleteSelectedOperation();
+        }
+    });
+
+    // Add the delete button to the content panel
+    JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+    buttonPanel.setBackground(Color.decode("#FFDEC8"));
+    buttonPanel.add(deleteButton);
+    
+    contentPanel.add(buttonPanel, BorderLayout.SOUTH);
+
     // Add the contentPanel to the databaseContentPanel
     panel.add(contentPanel, BorderLayout.CENTER);
 
     return panel;
 }
-
 
     private void loadOperations() {
         try {
@@ -301,6 +317,29 @@ public class ReportPage {
             JOptionPane.showMessageDialog(frame, "Invalid incident ID", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
+   private void deleteSelectedOperation() {
+    String selectedValue = operationList.getSelectedValue();
+    if (selectedValue != null) {
+        int incidentId = Integer.parseInt(selectedValue);
+        
+        // Delete the entry from the database
+        try {
+            operationController.deleteOperation(incidentId);
+            
+            // Remove the operation from the JList
+            DefaultListModel<String> listModel = (DefaultListModel<String>) operationList.getModel();
+            listModel.removeElement(selectedValue);
+            
+            detailTextArea.setText(""); // Clear details text area
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(frame, "Failed to delete operation from database.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    } else {
+        JOptionPane.showMessageDialog(frame, "No operation selected for deletion.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+}
 
     public static void main(String[] args) {
         // Initialize the DAO and controller

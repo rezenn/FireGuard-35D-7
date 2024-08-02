@@ -123,4 +123,16 @@ public  class OperationDAOImpl implements OperationDAO {
         }
         return operations;
     }
+    @Override
+    public void deleteOperation(int incidentId) throws SQLException {
+        String sql = "DELETE FROM operation WHERE incidentId = ?";
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
+            statement.setInt(1, incidentId);
+            int rowsAffected = statement.executeUpdate();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLException("Failed to delete schedule from the database", e);
+        }
+    }
 }

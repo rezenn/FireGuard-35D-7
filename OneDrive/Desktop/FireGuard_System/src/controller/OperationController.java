@@ -55,6 +55,14 @@ public class OperationController {
         }
     }
 
+     public void deleteOperation(int incidentId) {
+        try {
+        operationDAO.deleteOperation(incidentId);
+    } catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Failed to delete operation item from database.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    }
     public List<Operation> getAllOperations() throws SQLException {
         return operationDAO.getAllOperations();
     }
